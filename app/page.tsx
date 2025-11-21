@@ -370,7 +370,7 @@ export default function HomePage() {
     setIsBooking(true)
     const vehicle = vehicles.find(v => v.type === selectedVehicle)
     const distance = estimatedDistance || Math.random() * 15 + 5
-    const fare = estimatedFare || (distance * vehicle!.ratePerKm + 10).toFixed(2)
+    const fare = estimatedFare > 0 ? estimatedFare : (distance * vehicle!.ratePerKm + 10)
 
     // Simulate booking delay for realism
     await new Promise(resolve => setTimeout(resolve, 1500))
@@ -384,7 +384,7 @@ export default function HomePage() {
       datetime: datetime || new Date().toISOString(),
       vehicleType: selectedVehicle,
       vehicleName: vehicle!.name,
-      price: parseFloat(fare),
+      price: fare,
       status: 'requested',
       timestamp: new Date().toISOString(),
       distance: parseFloat(distance.toFixed(1)),

@@ -2,10 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['images.pexels.com', 'media.istockphoto.com', 'alphazug.com'],
-  },
-  experimental: {
-    serverActions: true,
+    domains: ['images.pexels.com', 'media.istockphoto.com', 'alphazug.com', 'poloandtweed.com', 'www.staffingattiffanies.com', 'cdn.bookingkit.de', 'grandex.de', 'www.topgear.com'],
   },
 }
 

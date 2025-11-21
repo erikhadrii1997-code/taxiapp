@@ -1200,11 +1200,11 @@ export default function HomePage() {
                   <Card className="text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-white border-2 border-primary/20 relative overflow-hidden group w-full max-w-full">
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div className="relative z-10 w-full">
-                      <div className="w-full h-56 sm:h-64 md:h-48 mx-auto mb-4 rounded-2xl overflow-hidden border-2 border-primary/20 shadow-xl group-hover:border-primary transition-all duration-300 transform group-hover:scale-105">
+                      <div className="w-full h-72 sm:h-80 md:h-48 mx-auto mb-4 rounded-2xl overflow-hidden border-2 border-primary/20 shadow-xl group-hover:border-primary transition-all duration-300 transform group-hover:scale-105">
                         <img
                           src="https://poloandtweed.com/wp-content/uploads/2021/04/Aafkes-Blog-Photos-47.png"
                           alt="Happy Rider"
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover object-center"
                           onError={(e) => {
                             (e.target as HTMLImageElement).src = 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=200'
                           }}
@@ -1219,11 +1219,11 @@ export default function HomePage() {
                   <Card className="text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-white border-2 border-primary/20 relative overflow-hidden group w-full max-w-full">
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div className="relative z-10 w-full">
-                      <div className="w-full h-56 sm:h-64 md:h-48 mx-auto mb-4 rounded-3xl overflow-hidden border-2 border-primary/20 shadow-xl group-hover:border-primary transition-all duration-300 transform group-hover:scale-105">
+                      <div className="w-full h-72 sm:h-80 md:h-48 mx-auto mb-4 rounded-3xl overflow-hidden border-2 border-primary/20 shadow-xl group-hover:border-primary transition-all duration-300 transform group-hover:scale-105">
                         <img
                           src="https://www.staffingattiffanies.com/wp-content/uploads/2021/01/happy-male-chauffeur-driving-car.png"
                           alt="Professional Driver"
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover object-center"
                           onError={(e) => {
                             (e.target as HTMLImageElement).src = 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=200'
                           }}
@@ -1238,11 +1238,11 @@ export default function HomePage() {
                   <Card className="text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-white border-2 border-primary/20 relative overflow-hidden group w-full max-w-full">
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div className="relative z-10 w-full">
-                      <div className="w-full h-56 sm:h-64 md:h-48 mx-auto mb-4 rounded-xl overflow-hidden border-2 border-primary/20 shadow-xl group-hover:border-primary transition-all duration-300 transform group-hover:scale-105">
+                      <div className="w-full h-72 sm:h-80 md:h-48 mx-auto mb-4 rounded-xl overflow-hidden border-2 border-primary/20 shadow-xl group-hover:border-primary transition-all duration-300 transform group-hover:scale-105">
                         <img
                           src="https://cdn.bookingkit.de/vendor_images/976872a4e8c7ab01720767b270d92968/detail/TRANSFERT564.jpg"
                           alt="Completed Rides"
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover object-center"
                           onError={(e) => {
                             (e.target as HTMLImageElement).src = 'https://images.pexels.com/photos/3802508/pexels-photo-3802508.jpeg?auto=compress&cs=tinysrgb&w=200'
                           }}

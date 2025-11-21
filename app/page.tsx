@@ -403,7 +403,7 @@ export default function HomePage() {
         route: `${pickup} to ${destination}`,
         date: booking.date,
         type: vehicle!.name,
-        price: parseFloat(fare),
+        price: fare,
         status: 'Upcoming',
       })
       localStorage.setItem('trips', JSON.stringify(trips))

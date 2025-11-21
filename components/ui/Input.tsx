@@ -20,7 +20,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         <div className="relative">
           {icon && (
-            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-primary">
+            <div className="absolute left-3 sm:left-3 md:left-4 top-1/2 transform -translate-y-1/2 text-primary z-10 pointer-events-none">
               {icon}
             </div>
           )}
@@ -32,7 +32,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               'focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent',
               'transition-all duration-200',
               'shadow-sm hover:shadow-md',
-              icon && 'pl-12',
+              icon && 'pl-14 sm:pl-14 md:pl-12',
               error && 'border-red-500 focus:ring-red-500',
               className
             )}

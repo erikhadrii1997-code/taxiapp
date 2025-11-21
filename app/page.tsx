@@ -989,12 +989,15 @@ export default function HomePage() {
                   </div>
 
                   {/* Date/Time Picker - Allows any date and time */}
-                  <Input
-                    type="datetime-local"
-                    value={datetime}
-                    onChange={(e) => setDatetime(e.target.value)}
-                    icon={<Clock className="w-5 h-5" />}
-                  />
+                  <div className="relative">
+                    <Input
+                      type="datetime-local"
+                      value={datetime}
+                      onChange={(e) => setDatetime(e.target.value)}
+                      icon={<Clock className="w-5 h-5 sm:w-5 sm:h-5" />}
+                      className="text-base sm:text-base py-3.5"
+                    />
+                  </div>
 
                   {/* Smart Submit Button */}
                   <Button
@@ -1192,12 +1195,12 @@ export default function HomePage() {
               </div>
 
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                   {/* Happy Riders */}
-                  <Card className="text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-white border-2 border-primary/20 relative overflow-hidden group">
+                  <Card className="text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-white border-2 border-primary/20 relative overflow-hidden group w-full">
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div className="relative z-10">
-                      <div className="w-full h-48 mx-auto mb-4 rounded-2xl overflow-hidden border-2 border-primary/20 shadow-xl group-hover:border-primary transition-all duration-300 transform group-hover:scale-105">
+                    <div className="relative z-10 w-full">
+                      <div className="w-full h-48 sm:h-56 md:h-48 mx-auto mb-4 rounded-2xl overflow-hidden border-2 border-primary/20 shadow-xl group-hover:border-primary transition-all duration-300 transform group-hover:scale-105">
                         <img
                           src="https://poloandtweed.com/wp-content/uploads/2021/04/Aafkes-Blog-Photos-47.png"
                           alt="Happy Rider"
@@ -1213,10 +1216,10 @@ export default function HomePage() {
                   </Card>
 
                   {/* Professional Drivers */}
-                  <Card className="text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-white border-2 border-primary/20 relative overflow-hidden group">
+                  <Card className="text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-white border-2 border-primary/20 relative overflow-hidden group w-full">
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div className="relative z-10">
-                      <div className="w-full h-48 mx-auto mb-4 rounded-3xl overflow-hidden border-2 border-primary/20 shadow-xl group-hover:border-primary transition-all duration-300 transform group-hover:scale-105">
+                    <div className="relative z-10 w-full">
+                      <div className="w-full h-48 sm:h-56 md:h-48 mx-auto mb-4 rounded-3xl overflow-hidden border-2 border-primary/20 shadow-xl group-hover:border-primary transition-all duration-300 transform group-hover:scale-105">
                         <img
                           src="https://www.staffingattiffanies.com/wp-content/uploads/2021/01/happy-male-chauffeur-driving-car.png"
                           alt="Professional Driver"
@@ -1232,10 +1235,10 @@ export default function HomePage() {
                   </Card>
 
                   {/* Completed Rides */}
-                  <Card className="text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-white border-2 border-primary/20 relative overflow-hidden group">
+                  <Card className="text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-white border-2 border-primary/20 relative overflow-hidden group w-full">
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div className="relative z-10">
-                      <div className="w-full h-48 mx-auto mb-4 rounded-xl overflow-hidden border-2 border-primary/20 shadow-xl group-hover:border-primary transition-all duration-300 transform group-hover:scale-105">
+                    <div className="relative z-10 w-full">
+                      <div className="w-full h-48 sm:h-56 md:h-48 mx-auto mb-4 rounded-xl overflow-hidden border-2 border-primary/20 shadow-xl group-hover:border-primary transition-all duration-300 transform group-hover:scale-105">
                         <img
                           src="https://cdn.bookingkit.de/vendor_images/976872a4e8c7ab01720767b270d92968/detail/TRANSFERT564.jpg"
                           alt="Completed Rides"

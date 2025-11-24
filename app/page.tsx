@@ -1171,8 +1171,7 @@ export default function HomePage() {
                         style={{ 
                           objectFit: 'cover',
                           width: '100%',
-                          height: '100%',
-                          imageRendering: 'high-quality'
+                          height: '100%'
                         }}
                         loading={index === carouselIndex ? 'eager' : 'lazy'}
                         fetchPriority={index === carouselIndex ? 'high' : 'auto'}
@@ -1314,8 +1313,7 @@ export default function HomePage() {
                         style={{ 
                           objectFit: 'cover',
                           width: '100%',
-                          height: '100%',
-                          imageRendering: 'high-quality'
+                          height: '100%'
                         }}
                         loading="lazy"
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"

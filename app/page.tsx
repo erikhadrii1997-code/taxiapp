@@ -1152,7 +1152,7 @@ export default function HomePage() {
             {/* Smart Image Carousel - Mobile Responsive */}
             <div className="w-full max-w-[600px] mx-auto mb-6 rounded-2xl overflow-hidden relative shadow-xl border border-gray-200 group">
               <div 
-                className="relative w-full h-[280px] sm:h-[300px] md:h-[320px] lg:h-[350px] touch-pan-y"
+                className="relative w-full h-[360px] sm:h-[300px] md:h-[320px] lg:h-[350px] touch-pan-y bg-gray-100"
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
@@ -1163,13 +1163,12 @@ export default function HomePage() {
                   style={{ transform: `translateX(-${carouselIndex * 100}%)` }}
                 >
                   {vehicles.map((vehicle, index) => (
-                    <div key={vehicle.type} className="min-w-full h-full relative flex-shrink-0 overflow-hidden">
+                    <div key={vehicle.type} className="min-w-full h-full relative flex-shrink-0 flex items-center justify-center bg-gray-100">
                       <img
                         src={vehicle.image}
                         alt={vehicle.name}
-                        className="w-full h-full object-cover sm:object-cover"
+                        className="w-full h-full object-contain sm:object-cover"
                         style={{ 
-                          objectFit: 'cover',
                           width: '100%',
                           height: '100%'
                         }}
@@ -1177,7 +1176,7 @@ export default function HomePage() {
                         fetchPriority={index === carouselIndex ? 'high' : 'auto'}
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 600px, 600px"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none"></div>
                 
                 {/* Vehicle Info Overlay */}
                       <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 md:p-6 text-white">

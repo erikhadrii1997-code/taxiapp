@@ -1152,7 +1152,7 @@ export default function HomePage() {
             {/* Smart Image Carousel - Mobile Responsive */}
             <div className="w-full max-w-[600px] mx-auto mb-6 rounded-2xl overflow-hidden relative shadow-xl border border-gray-200 group">
               <div 
-                className="relative w-full h-[220px] sm:h-[250px] md:h-[280px] lg:h-[300px] touch-pan-y"
+                className="relative w-full h-[280px] sm:h-[300px] md:h-[320px] lg:h-[350px] touch-pan-y"
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
@@ -1163,12 +1163,20 @@ export default function HomePage() {
                   style={{ transform: `translateX(-${carouselIndex * 100}%)` }}
                 >
                   {vehicles.map((vehicle, index) => (
-                    <div key={vehicle.type} className="min-w-full h-full relative flex-shrink-0">
+                    <div key={vehicle.type} className="min-w-full h-full relative flex-shrink-0 overflow-hidden">
                       <img
                         src={vehicle.image}
                         alt={vehicle.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover sm:object-cover"
+                        style={{ 
+                          objectFit: 'cover',
+                          width: '100%',
+                          height: '100%',
+                          imageRendering: 'high-quality'
+                        }}
                         loading={index === carouselIndex ? 'eager' : 'lazy'}
+                        fetchPriority={index === carouselIndex ? 'high' : 'auto'}
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 600px, 600px"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                 
@@ -1303,6 +1311,14 @@ export default function HomePage() {
                         src={vehicle.image}
                         alt={vehicle.name}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        style={{ 
+                          objectFit: 'cover',
+                          width: '100%',
+                          height: '100%',
+                          imageRendering: 'high-quality'
+                        }}
+                        loading="lazy"
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                       {/* Badge */}
@@ -2204,15 +2220,15 @@ export default function HomePage() {
 
                   {/* Favorites Section */}
                   <div className="pt-4 border-t border-primary/20">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary-dark rounded-full flex items-center justify-center">
-                          <Heart className="w-4 h-4 text-white fill-white" />
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 gap-2.5 sm:gap-3">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 bg-gradient-to-r from-primary to-primary-dark rounded-full flex items-center justify-center flex-shrink-0">
+                          <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-white fill-white" />
                         </div>
-                        <h4 className="font-bold text-gray-900">Favorites</h4>
-                        <span className="text-xs text-gray-500 bg-primary/10 px-2 py-0.5 rounded-full">({favoriteLocations.length})</span>
+                        <h4 className="font-bold text-gray-900 text-sm sm:text-base md:text-lg">Favorites</h4>
+                        <span className="text-[10px] sm:text-xs md:text-sm text-gray-500 bg-primary/10 px-1.5 sm:px-2 py-0.5 rounded-full">({favoriteLocations.length})</span>
                       </div>
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2 w-full sm:w-auto">
                         <button
                           onClick={() => {
                             // Smart: Suggest from recent locations, popular destinations, or airports
@@ -2243,7 +2259,7 @@ export default function HomePage() {
                               }
                             }
                           }}
-                          className="px-3 py-1.5 bg-gradient-to-r from-primary to-primary-dark text-white text-xs font-semibold rounded-lg hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 flex items-center gap-1"
+                          className="px-2.5 sm:px-3 py-1.5 bg-gradient-to-r from-primary to-primary-dark text-white text-[10px] sm:text-xs font-semibold rounded-lg hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 flex items-center gap-1 flex-1 sm:flex-none"
                         >
                           <Plus className="w-3 h-3" />
                           Add
@@ -2284,7 +2300,7 @@ export default function HomePage() {
                               }
                             }
                           }}
-                          className="px-3 py-1.5 bg-primary/10 border border-primary/30 text-primary text-xs font-semibold rounded-lg hover:bg-primary/20 transition-all duration-200 flex items-center gap-1"
+                          className="px-2.5 sm:px-3 py-1.5 bg-primary/10 border border-primary/30 text-primary text-[10px] sm:text-xs font-semibold rounded-lg hover:bg-primary/20 transition-all duration-200 flex items-center gap-1 flex-1 sm:flex-none"
                           title="Enter both locations manually"
                         >
                           <MapPin className="w-3 h-3" />
@@ -2294,19 +2310,19 @@ export default function HomePage() {
                     </div>
                     
                     {favoriteLocations.length > 0 ? (
-                      <div className="space-y-2">
+                      <div className="space-y-2.5 sm:space-y-2">
                         {favoriteLocations.map((fav, idx) => (
                           <div
                             key={idx}
-                            className="p-3 bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg border-2 border-primary/20 hover:border-primary/50 transition-all duration-300 flex items-center justify-between group hover:shadow-md"
+                            className="p-2.5 sm:p-3 bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg border-2 border-primary/20 hover:border-primary/50 transition-all duration-300 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3 group hover:shadow-md"
                           >
-                            <div className="flex items-center gap-3 flex-1 min-w-0">
-                              <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary-dark rounded-full flex items-center justify-center flex-shrink-0">
-                                <Heart className="w-4 h-4 text-white fill-white" />
+                            <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-r from-primary to-primary-dark rounded-full flex items-center justify-center flex-shrink-0">
+                                <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white fill-white" />
                               </div>
-                              <span className="text-sm font-medium text-gray-900 truncate" title={fav}>{fav}</span>
+                              <span className="text-xs sm:text-sm font-medium text-gray-900 truncate flex-1" title={fav}>{fav}</span>
                             </div>
-                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-shrink-0">
+                            <div className="flex flex-row items-center gap-1.5 sm:gap-2 flex-shrink-0 flex-wrap sm:flex-nowrap">
                               <button
                                 onClick={() => {
                                   // Directly set favorite as pickup
@@ -2327,7 +2343,7 @@ export default function HomePage() {
                                     }
                                   }, 300)
                                 }}
-                                className="px-3 py-1.5 bg-gradient-to-r from-primary to-primary-dark text-white text-xs font-semibold rounded-lg hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 whitespace-nowrap"
+                                className="px-2.5 py-1.5 sm:px-3 bg-gradient-to-r from-primary to-primary-dark text-white text-[10px] sm:text-xs font-semibold rounded-lg hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 whitespace-nowrap flex-1 sm:flex-none min-w-[90px] sm:min-w-0"
                               >
                                 Set as Pickup
                               </button>
@@ -2351,7 +2367,7 @@ export default function HomePage() {
                                     }
                                   }, 300)
                                 }}
-                                className="px-3 py-1.5 bg-gradient-to-r from-primary/80 to-primary-dark/80 text-white text-xs font-semibold rounded-lg hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 whitespace-nowrap"
+                                className="px-2.5 py-1.5 sm:px-3 bg-gradient-to-r from-primary/80 to-primary-dark/80 text-white text-[10px] sm:text-xs font-semibold rounded-lg hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 whitespace-nowrap flex-1 sm:flex-none min-w-[90px] sm:min-w-0"
                               >
                                 Set as Drop-off
                               </button>
@@ -2376,17 +2392,17 @@ export default function HomePage() {
                                     }
                                   }, 300)
                                 }}
-                                className="px-2 py-1.5 bg-primary/20 border border-primary/40 text-primary text-xs font-semibold rounded-lg hover:bg-primary/30 hover:border-primary/60 transition-all duration-200 whitespace-nowrap"
+                                className="px-2 py-1.5 sm:px-2 bg-primary/20 border border-primary/40 text-primary text-[10px] sm:text-xs font-semibold rounded-lg hover:bg-primary/30 hover:border-primary/60 transition-all duration-200 whitespace-nowrap"
                                 title="Set as both pickup and drop-off"
                               >
                                 Set Both
                               </button>
                               <button
                                 onClick={() => handleRemoveFavorite(fav)}
-                                className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95"
+                                className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95 flex-shrink-0"
                                 title="Remove from favorites"
                               >
-                                <Trash2 className="w-4 h-4" />
+                                <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                               </button>
                             </div>
                           </div>

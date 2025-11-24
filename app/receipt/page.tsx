@@ -155,10 +155,10 @@ Thank you for choosing Luxride!
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <Card className="print:shadow-none">
             {/* Receipt Header */}
-            <div className="bg-gradient-to-r from-primary to-primary-dark text-white rounded-t-2xl p-8 mb-6 print:bg-gray-900">
+            <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-primary-dark/10 border-b-2 border-primary/20 rounded-t-2xl p-8 mb-6 print:bg-gray-900">
               <div className="text-center">
-                <h1 className="text-4xl font-bold font-serif mb-2">Luxride</h1>
-                <p className="text-primary-light">Premium Transportation</p>
+                <h1 className="text-4xl font-bold font-serif mb-2 bg-gradient-to-r from-primary via-primary-dark to-primary bg-clip-text text-transparent">Luxride</h1>
+                <p className="text-primary-dark font-medium">Premium Transportation</p>
               </div>
             </div>
 
@@ -205,11 +205,37 @@ Thank you for choosing Luxride!
               </div>
             </div>
 
-            {/* Map */}
-            <div className="mb-6">
-              <div className="h-48 w-full rounded-xl overflow-hidden">
-                <MapComponent pickup={booking.pickup} dropoff={booking.destination} />
+            {/* Map with Stylish Design */}
+            <div className="mb-6 relative">
+              {/* Decorative background layers */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                {/* Outer decorative ring */}
+                <div className="absolute w-full h-96 border-4 border-primary/20 rounded-full"></div>
+                {/* Middle decorative ring */}
+                <div className="absolute w-[95%] h-[91%] border-2 border-primary/30 rounded-full"></div>
+                {/* Inner decorative ring */}
+                <div className="absolute w-[90%] h-[86%] border border-primary/40 rounded-full"></div>
               </div>
+              
+              {/* Decorative gradient overlay */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="absolute w-full h-96 bg-gradient-to-br from-primary/5 via-transparent to-primary-dark/5 rounded-full blur-xl"></div>
+              </div>
+              
+              {/* Map container with enhanced styling */}
+              <div className="relative z-10 flex items-center justify-center">
+                <div className="relative h-96 w-full overflow-hidden border-4 border-primary/30 shadow-2xl" style={{ borderRadius: '50%' }}>
+                  {/* Inner shadow for depth */}
+                  <div className="absolute inset-0 rounded-full shadow-inner pointer-events-none" style={{ boxShadow: 'inset 0 0 30px rgba(0,0,0,0.1)' }}></div>
+                  <MapComponent pickup={booking.pickup} dropoff={booking.destination} />
+                </div>
+              </div>
+              
+              {/* Decorative corner accents */}
+              <div className="absolute top-0 left-0 w-16 h-16 bg-gradient-to-br from-primary/20 to-transparent rounded-br-full pointer-events-none"></div>
+              <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-primary/20 to-transparent rounded-bl-full pointer-events-none"></div>
+              <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-primary/20 to-transparent rounded-tr-full pointer-events-none"></div>
+              <div className="absolute bottom-0 right-0 w-16 h-16 bg-gradient-to-tl from-primary/20 to-transparent rounded-tl-full pointer-events-none"></div>
             </div>
 
             {/* Fare Breakdown */}
@@ -275,9 +301,12 @@ Thank you for choosing Luxride!
           </Card>
 
           <div className="mt-6 text-center print:hidden">
-            <Button onClick={() => router.push('/trips')} variant="outline">
+            <button 
+              onClick={() => router.push('/trips')} 
+              className="px-8 py-3 bg-gradient-to-r from-primary to-primary-dark text-white font-semibold rounded-xl hover:from-primary-dark hover:to-primary transition-all duration-200 shadow-lg hover:shadow-xl"
+            >
               Back to Trips
-            </Button>
+            </button>
           </div>
         </div>
       </main>

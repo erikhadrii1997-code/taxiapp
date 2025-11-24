@@ -104,18 +104,18 @@ export default function InboxPage() {
                       {!notification.read && (
                         <button
                           onClick={() => markAsRead(notification.id)}
-                          className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors"
+                          className="p-3 text-primary hover:bg-primary/10 rounded-lg transition-colors"
                           title="Mark as read"
                         >
-                          <Check className="w-5 h-5" />
+                          <Check className="w-7 h-7" />
                         </button>
                       )}
                       <button
                         onClick={() => deleteNotification(notification.id)}
-                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-3 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                         title="Delete"
                       >
-                        <X className="w-5 h-5" />
+                        <X className="w-7 h-7" />
                       </button>
                     </div>
                   </div>

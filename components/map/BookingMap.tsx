@@ -17,7 +17,15 @@ export default function BookingMap({ pickup, dropoff }: BookingMapProps) {
     if (!mapRef.current || mapInstanceRef.current) return
 
     // Initialize map centered on a default location (NYC)
-    const map = L.map(mapRef.current).setView([40.7128, -74.0060], 13)
+    const map = L.map(mapRef.current, {
+      zoomControl: true,
+      attributionControl: true,
+    }).setView([40.7128, -74.0060], 13)
+    
+    // Ensure map fills container
+    setTimeout(() => {
+      map.invalidateSize()
+    }, 100)
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -69,6 +77,11 @@ export default function BookingMap({ pickup, dropoff }: BookingMapProps) {
     // Fit bounds to show both markers
     const bounds = L.latLngBounds([pickupCoords, dropoffCoords])
     map.fitBounds(bounds, { padding: [50, 50] })
+    
+    // Ensure map fills container after fitting bounds
+    setTimeout(() => {
+      map.invalidateSize()
+    }, 100)
 
     // Draw route line
     const polyline = L.polyline([pickupCoords, dropoffCoords], {
@@ -84,6 +97,6 @@ export default function BookingMap({ pickup, dropoff }: BookingMapProps) {
     }
   }, [pickup, dropoff])
 
-  return <div ref={mapRef} className="w-full h-full rounded-xl" />
+  return <div ref={mapRef} className="w-full h-full" style={{ minHeight: '100%', minWidth: '100%', borderRadius: '50%' }} />
 }
 

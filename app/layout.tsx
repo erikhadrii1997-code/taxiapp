@@ -44,25 +44,52 @@ export default function RootLayout({
       <body className={inter.className}>
         {children}
         <Toaster 
-          position="top-right"
+          position="top-center"
           toastOptions={{
-            duration: 4000,
+            duration: 3000,
             style: {
-              background: '#1a1a1a',
-              color: '#fff',
-              borderRadius: '12px',
-              padding: '16px',
+              background: '#ffffff',
+              color: '#1f2937',
+              borderRadius: '16px',
+              padding: '16px 20px',
+              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+              border: '1px solid #e5e7eb',
+              fontSize: '14px',
+              fontWeight: '500',
+              maxWidth: '400px',
+              minWidth: '300px',
             },
             success: {
               iconTheme: {
                 primary: '#10b981',
-                secondary: '#fff',
+                secondary: '#ffffff',
+              },
+              style: {
+                background: '#f0fdf4',
+                color: '#166534',
+                border: '1px solid #86efac',
               },
             },
             error: {
               iconTheme: {
                 primary: '#ef4444',
-                secondary: '#fff',
+                secondary: '#ffffff',
+              },
+              style: {
+                background: '#fef2f2',
+                color: '#991b1b',
+                border: '1px solid #fca5a5',
+              },
+            },
+            loading: {
+              iconTheme: {
+                primary: '#d4af37',
+                secondary: '#ffffff',
+              },
+              style: {
+                background: '#fffbeb',
+                color: '#92400e',
+                border: '1px solid #fde68a',
               },
             },
           }}

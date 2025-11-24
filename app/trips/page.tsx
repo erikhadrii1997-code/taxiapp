@@ -25,15 +25,15 @@ export default function TripsPage() {
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'completed':
-        return 'bg-green-100 text-green-800'
+        return 'bg-green-50 text-green-700 border-green-300'
       case 'upcoming':
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-red-50 text-red-700 border-red-300'
       case 'cancelled':
-        return 'bg-red-100 text-red-800'
+        return 'bg-red-50 text-red-700 border-red-300'
       case 'in-progress':
-        return 'bg-yellow-100 text-yellow-800'
+        return 'bg-yellow-50 text-yellow-700 border-yellow-300'
       default:
-        return 'bg-gray-100 text-gray-800'
+        return 'bg-gray-50 text-gray-700 border-gray-300'
     }
   }
 
@@ -81,7 +81,7 @@ export default function TripsPage() {
                           <span>{formatDate(trip.date)}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Car className="w-4 h-4" />
+                          <Car className="w-6 h-6" />
                           <span>{trip.type}</span>
                         </div>
                         <div className="flex items-center gap-2">
@@ -93,15 +93,31 @@ export default function TripsPage() {
                       </div>
                     </div>
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                      <span
-                        className={`px-4 py-2 rounded-full text-sm font-medium ${getStatusColor(
-                          trip.status
-                        )}`}
-                      >
-                        {trip.status}
-                      </span>
+                      {trip.status.toLowerCase() === 'upcoming' ? (
+                        <span
+                          className="
+                            inline-flex items-center justify-center
+                            px-4 py-2 rounded-xl text-sm font-semibold
+                            bg-gradient-to-r from-red-600 to-red-700 text-white
+                            shadow-md hover:shadow-lg hover:-translate-y-0.5
+                            transition-all duration-200
+                          "
+                        >
+                          {trip.status}
+                        </span>
+                      ) : (
+                        <span
+                          className={`
+                            px-5 py-2.5 rounded-xl text-sm font-semibold
+                            shadow-sm border transition-all duration-200
+                            ${getStatusColor(trip.status)}
+                          `}
+                        >
+                          {trip.status}
+                        </span>
+                      )}
                       <Link href={`/receipt?id=${trip.id}`}>
-                        <Button variant="outline" size="sm">
+                        <Button variant="primary" size="sm">
                           View Receipt
                         </Button>
                       </Link>

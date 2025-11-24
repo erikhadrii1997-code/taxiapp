@@ -122,8 +122,6 @@ export default function HomePage() {
   const [isBooking, setIsBooking] = useState(false)
   const [scheduledRides, setScheduledRides] = useState<any[]>([])
   const [showScheduleForm, setShowScheduleForm] = useState(false)
-  const [touchStart, setTouchStart] = useState(0)
-  const [touchEnd, setTouchEnd] = useState(0)
   const [statsVisible, setStatsVisible] = useState(false)
   const [showVideoPlayButton, setShowVideoPlayButton] = useState(true)
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -592,27 +590,39 @@ export default function HomePage() {
   }
 
   // Touch handlers for carousel swipe
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchEnd(0)
-    setTouchStart(e.targetTouches[0].clientX)
+  // New improved slider state and handlers
+  const [isDragging, setIsDragging] = useState(false)
+  const [dragStart, setDragStart] = useState(0)
+  const [dragOffset, setDragOffset] = useState(0)
+
+  const handleSliderTouchStart = (e: React.TouchEvent) => {
+    setIsDragging(true)
+    setDragStart(e.touches[0].clientX)
+    setDragOffset(0)
   }
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX)
+  const handleSliderTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return
+    const currentX = e.touches[0].clientX
+    const diff = dragStart - currentX
+    setDragOffset(diff)
   }
 
-  const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd) return
-    const distance = touchStart - touchEnd
-    const isLeftSwipe = distance > 50
-    const isRightSwipe = distance < -50
-
-    if (isLeftSwipe) {
-      setCarouselIndex((prev) => (prev + 1) % vehicles.length)
+  const handleSliderTouchEnd = () => {
+    if (!isDragging) return
+    
+    const threshold = 50
+    if (Math.abs(dragOffset) > threshold) {
+      if (dragOffset > 0) {
+        setCarouselIndex((prev) => (prev + 1) % vehicles.length)
+      } else {
+        setCarouselIndex((prev) => (prev - 1 + vehicles.length) % vehicles.length)
+      }
     }
-    if (isRightSwipe) {
-      setCarouselIndex((prev) => (prev - 1 + vehicles.length) % vehicles.length)
-    }
+    
+    setIsDragging(false)
+    setDragOffset(0)
+    setDragStart(0)
   }
 
   const handlePickupChange = (value: string) => {
@@ -1149,53 +1159,62 @@ export default function HomePage() {
 
               </Card>
 
-            {/* Smart Image Carousel - Mobile Responsive */}
-            <div className="w-full max-w-[600px] mx-auto mb-6 rounded-2xl overflow-hidden relative shadow-xl border border-gray-200 group">
+            {/* New Vehicle Slider - Full Width Mobile */}
+            <div className="w-full mb-6">
               <div 
-                className="relative w-full h-[360px] sm:h-[300px] md:h-[320px] lg:h-[350px] touch-pan-y bg-gray-100"
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
+                className="relative w-full overflow-hidden rounded-2xl shadow-xl border border-gray-200"
+                onTouchStart={handleSliderTouchStart}
+                onTouchMove={handleSliderTouchMove}
+                onTouchEnd={handleSliderTouchEnd}
               >
-                {/* Carousel Container with Smooth Transitions */}
+                {/* Slider Container */}
                 <div 
-                  className="flex transition-transform duration-500 ease-in-out h-full"
-                  style={{ transform: `translateX(-${carouselIndex * 100}%)` }}
+                  className="flex transition-transform duration-300 ease-out h-[400px] sm:h-[350px] md:h-[380px] lg:h-[400px]"
+                  style={{ 
+                    transform: `translateX(calc(-${carouselIndex * 100}% + ${isDragging ? -dragOffset : 0}px))`,
+                    transition: isDragging ? 'none' : 'transform 0.3s ease-out'
+                  }}
                 >
                   {vehicles.map((vehicle, index) => (
-                    <div key={vehicle.type} className="min-w-full h-full relative flex-shrink-0 flex items-center justify-center bg-gray-100">
+                    <div 
+                      key={vehicle.type} 
+                      className="min-w-full w-full h-full relative flex-shrink-0"
+                    >
+                      {/* Full Width Image - 100% on Mobile */}
                       <img
                         src={vehicle.image}
                         alt={vehicle.name}
-                        className="w-full h-full object-contain sm:object-cover"
+                        className="w-full h-full object-cover"
                         style={{ 
                           width: '100%',
-                          height: '100%'
+                          height: '100%',
+                          display: 'block'
                         }}
                         loading={index === carouselIndex ? 'eager' : 'lazy'}
                         fetchPriority={index === carouselIndex ? 'high' : 'auto'}
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 600px, 600px"
+                        sizes="100vw"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none"></div>
-                
-                {/* Vehicle Info Overlay */}
-                      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 md:p-6 text-white">
-                        <div className="flex items-center justify-between mb-2">
+                      
+                      {/* Gradient Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none"></div>
+                      
+                      {/* Vehicle Info Overlay */}
+                      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 text-white z-10">
+                        <div className="flex items-center justify-between mb-3">
                           <div>
-                            <div className="font-bold text-lg sm:text-xl md:text-2xl mb-1">{vehicle.name}</div>
-                            <div className="text-sm sm:text-base md:text-lg opacity-90 font-semibold">
+                            <div className="font-bold text-xl sm:text-2xl md:text-3xl mb-1">{vehicle.name}</div>
+                            <div className="text-base sm:text-lg md:text-xl opacity-90 font-semibold">
                               {formatCurrency(vehicle.ratePerKm)}/km
                             </div>
                           </div>
-                          {/* Badge */}
-                          <div className="bg-black/60 backdrop-blur-sm text-white text-xs sm:text-sm px-3 py-1.5 rounded-full flex items-center gap-1.5 font-semibold">
-                            <span className="hidden sm:inline">{vehicle.badge}</span>
+                          <div className="bg-black/70 backdrop-blur-sm text-white text-xs sm:text-sm px-3 py-1.5 rounded-full font-semibold">
+                            {vehicle.badge}
                           </div>
                         </div>
                         {/* Vehicle Features */}
-                        <div className="flex flex-wrap gap-2 mt-2">
+                        <div className="flex flex-wrap gap-2">
                           {vehicle.features.slice(0, 3).map((feature, idx) => (
-                            <span key={idx} className="text-xs sm:text-sm bg-white/20 backdrop-blur-sm px-2 py-1 rounded-full">
+                            <span key={idx} className="text-xs sm:text-sm bg-white/30 backdrop-blur-sm px-3 py-1 rounded-full font-medium">
                               {feature}
                             </span>
                           ))}
@@ -1205,45 +1224,40 @@ export default function HomePage() {
                   ))}
                 </div>
                 
-                {/* Carousel Controls - Always Visible on Mobile */}
+                {/* Navigation Arrows */}
                 <button
                   onClick={() => setCarouselIndex((prev) => (prev - 1 + vehicles.length) % vehicles.length)}
-                  className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-black/60 hover:bg-black/80 active:bg-black/90 rounded-full flex items-center justify-center text-white transition-all shadow-lg z-10 touch-manipulation"
+                  className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-black/70 hover:bg-black/90 active:bg-black rounded-full flex items-center justify-center text-white transition-all shadow-lg z-20"
                   aria-label="Previous vehicle"
                 >
                   <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
                   </svg>
                 </button>
                 <button
                   onClick={() => setCarouselIndex((prev) => (prev + 1) % vehicles.length)}
-                  className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-black/60 hover:bg-black/80 active:bg-black/90 rounded-full flex items-center justify-center text-white transition-all shadow-lg z-10 touch-manipulation"
+                  className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-black/70 hover:bg-black/90 active:bg-black rounded-full flex items-center justify-center text-white transition-all shadow-lg z-20"
                   aria-label="Next vehicle"
                 >
                   <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                   </svg>
                 </button>
                 
-                {/* Carousel Dots - Mobile Responsive */}
-                <div className="absolute bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+                {/* Dots Indicator */}
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
                   {vehicles.map((_, index) => (
                     <button
                       key={index}
                       onClick={() => setCarouselIndex(index)}
-                      className={`rounded-full transition-all duration-300 touch-manipulation ${
+                      className={`rounded-full transition-all duration-300 ${
                         index === carouselIndex 
-                          ? 'bg-primary w-8 h-2 sm:w-10 sm:h-2.5 shadow-lg' 
-                          : 'bg-white/50 w-2 h-2 sm:w-2.5 sm:h-2.5 hover:bg-white/70 active:bg-white/90'
+                          ? 'bg-primary w-10 h-2.5 shadow-lg' 
+                          : 'bg-white/60 w-2.5 h-2.5 hover:bg-white/80'
                       }`}
                       aria-label={`Go to vehicle ${index + 1}`}
                     />
                   ))}
-                </div>
-                
-                {/* Swipe Indicator for Mobile */}
-                <div className="absolute top-4 right-4 sm:hidden bg-black/40 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
-                  Swipe
                 </div>
               </div>
             </div>

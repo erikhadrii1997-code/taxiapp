@@ -69,7 +69,7 @@ const vehicles = [
     capacity: 8,
     time: '~9 min',
     image: 'https://www.topgear.com/sites/default/files/2024/02/2024-cadillac-escalade-v-series-010.jpg',
-    features: ['Extra Space', 'Luggage', 'Party'],
+    features: ['Extra Space', 'Luggage'],
     details: 'Extra-large vehicle for big groups or lots of luggage. Comfortably seats up to 8 passengers.',
     icon: 'truck-pickup',
     badge: 'Group',

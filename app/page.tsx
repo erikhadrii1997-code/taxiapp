@@ -1317,7 +1317,7 @@ export default function HomePage() {
                         ? 'bg-primary/10 border-2 border-primary shadow-lg transform scale-105 ring-2 ring-primary/50'
                         : recommendedVehicle === vehicle.type && !selectedVehicle
                         ? 'bg-primary/5 border-2 border-primary/50 shadow-md hover:border-primary'
-                        : 'bg-cream border-2 border-gray-200 hover:border-primary/50 hover:shadow-md'
+                        : 'bg-white border-2 border-primary/20 hover:border-primary/50 hover:shadow-md'
                       }
                     `}
                   >

@@ -4,12 +4,13 @@ import { useEffect, useState, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
-import { MapPin, Clock, Star, ArrowRight, Car, Shield, Zap, Phone, X, TrendingUp, Users, Navigation, Sparkles, Home, Briefcase, Heart, Plus, Trash2, Plane, Building2, ShoppingBag, UtensilsCrossed, LocateIcon, Loader2, Calendar, CalendarClock, Play } from 'lucide-react'
+import { MapPin, Clock, Star, ArrowRight, Car, Shield, Zap, Phone, X, TrendingUp, Users, Navigation, Sparkles, Home, Briefcase, Heart, Plus, Trash2, Plane, Building2, ShoppingBag, UtensilsCrossed, LocateIcon, Loader2, Calendar, CalendarClock, Play, Check } from 'lucide-react'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import Input from '@/components/ui/Input'
+import TaxiAnimation from '@/components/ui/TaxiAnimation'
 import toast from 'react-hot-toast'
 import { VehicleType, Booking, Trip } from '@/types'
 import { formatCurrency, formatDate } from '@/lib/utils'
@@ -23,7 +24,7 @@ const vehicles = [
   {
     type: 'standard' as VehicleType,
     name: 'Standard',
-    ratePerKm: 0.5,
+    ratePerKm: 3.50, // Las Vegas Luxury Sedan (Mercedes S-Class): $140/hour = $3.50/km
     capacity: 4,
     time: '~12 min',
     image: 'https://alphazug.com/wp-content/uploads/2020/11/800px-Rolls-Royce_Phantom_VIII_Genf_2019_1Y7A5148.jpg',
@@ -37,7 +38,7 @@ const vehicles = [
   {
     type: 'premium' as VehicleType,
     name: 'Premium',
-    ratePerKm: 0.8,
+    ratePerKm: 5.00, // Las Vegas Super Luxury (Rolls Royce level): Premium luxury rate
     capacity: 4,
     time: '~10 min',
     image: 'https://grandex.de/wp-content/uploads/2025/02/1732025731_a2ffe1f614e25c297f73-17.jpg',
@@ -51,7 +52,7 @@ const vehicles = [
   {
     type: 'luxury' as VehicleType,
     name: 'SUV',
-    ratePerKm: 0.7,
+    ratePerKm: 4.50, // Las Vegas Premium SUV (Escalade, Navigator): $175/hour = $4.38/km
     capacity: 6,
     time: '~11 min',
     image: 'https://media.istockphoto.com/id/1348551471/photo/night-photo-of-a-cadillac-escalade-luxury-suv-limo-used-for-uber-and-lyft.jpg?s=612x612&w=0&k=20&c=o6z49qXSxzjUm6JR8ml2QQNxs1E1oBgJOktZwYAWkZo=',
@@ -65,7 +66,7 @@ const vehicles = [
   {
     type: 'xl' as VehicleType,
     name: 'XL',
-    ratePerKm: 1.0,
+    ratePerKm: 6.00, // Las Vegas Executive Van (Sprinter): $400/hour = $10/km (adjusted for per-km pricing)
     capacity: 8,
     time: '~9 min',
     image: 'https://www.topgear.com/sites/default/files/2024/02/2024-cadillac-escalade-v-series-010.jpg',
@@ -97,6 +98,8 @@ export default function HomePage() {
   const [carouselIndex, setCarouselIndex] = useState(0)
   const [driverDistance, setDriverDistance] = useState(4.6)
   const [driverETA, setDriverETA] = useState(8)
+  const [journeyProgress, setJourneyProgress] = useState(0) // 0 to 100, percentage of journey completed
+  const [totalJourneyDistance, setTotalJourneyDistance] = useState(0) // Total distance from pickup to dropoff
   const [driverInfo, setDriverInfo] = useState<{ name: string; vehicle: string; licensePlate: string }>({
     name: 'John Doe',
     vehicle: 'Toyota Camry',
@@ -240,52 +243,70 @@ export default function HomePage() {
     }
   }, [selectedVehicle])
 
-  // Update driver distance and ETA based on user input (pickup/destination)
+  // Calculate total journey distance and initialize tracking
   useEffect(() => {
-    if (pickup && destination && estimatedDistance > 0) {
-      // When user provides pickup and destination, calculate estimated distance
-      // Calculate initial driver distance (driver starts further away when booking)
-      // Driver distance should be a realistic portion of total trip (e.g., 20-40% of trip distance)
-      const initialDriverDistance = Math.min(Math.max(estimatedDistance * 0.25, 2), 8) // 25% of trip, min 2km, max 8km
-      setDriverDistance(parseFloat(initialDriverDistance.toFixed(1)))
+    if (pickup && destination) {
+      // Use estimatedDistance if available, otherwise calculate a reasonable estimate
+      // For addresses, we'll use a simple calculation based on estimatedDistance
+      // If estimatedDistance is not set, use a default calculation
+      const journeyDist = estimatedDistance > 0 ? estimatedDistance : 5 // Default 5km if not calculated
+      setTotalJourneyDistance(journeyDist)
       
-      // Calculate ETA based on distance and average city speed (40 km/h)
+      // Initialize: Driver starts at pickup location (0% progress)
+      // The journey is from pickup to dropoff
+      setJourneyProgress(0)
+      
+      // Initial distance to pickup (driver coming to pickup location)
+      // This is separate from the journey - driver needs to reach pickup first
+      const driverToPickupDistance = Math.min(Math.max(journeyDist * 0.3, 1), 5) // 30% of journey or 1-5km
+      setDriverDistance(parseFloat(driverToPickupDistance.toFixed(1)))
+      
+      // Calculate ETA to pickup location
       const averageSpeed = 40 // km/h
-      const driverETAValue = Math.max(1, Math.round((initialDriverDistance / averageSpeed) * 60))
+      const driverETAValue = Math.max(1, Math.round((driverToPickupDistance / averageSpeed) * 60))
       setDriverETA(driverETAValue)
-    } else if (!pickup || !destination) {
+    } else {
       // Default values when no pickup/destination
+      setTotalJourneyDistance(0)
+      setJourneyProgress(0)
       setDriverDistance(4.6)
       setDriverETA(7)
     }
-  }, [pickup, destination, estimatedDistance, estimatedTime])
+  }, [pickup, destination, estimatedDistance])
 
   useEffect(() => {
     // Simulate live driver tracking with realistic updates
     // Average city speed: 35-45 km/h (use 40 km/h average)
-    // Update every 3 seconds (realistic GPS update interval)
+    // Update every 2 seconds for smoother animation
     const averageSpeed = 40 // km/h
-    const updateInterval = 3000 // 3 seconds
+    const updateInterval = 2000 // 2 seconds
     const distancePerUpdate = (averageSpeed / 3600) * (updateInterval / 1000) // km per update
     
-    if (pickup && destination && driverDistance > 0.05) {
+    if (pickup) {
       const interval = setInterval(() => {
         setDriverDistance((prev) => {
-          // Realistic distance decrease with slight variation (traffic, lights, etc.)
-          const variation = 0.8 + (Math.random() * 0.4) // 80% to 120% of normal speed
-          const decrease = distancePerUpdate * variation
-          const newDistance = Math.max(0.05, prev - decrease)
-          
-          // Calculate ETA based on remaining distance and speed
-          const remainingETA = Math.max(1, Math.round((newDistance / averageSpeed) * 60))
-          setDriverETA(remainingETA)
-          
+          // Driver is coming to pickup location (Your Location)
+          if (prev > 0.05) {
+            const variation = 0.85 + (Math.random() * 0.3) // 85% to 115% of normal speed
+            const decrease = distancePerUpdate * variation
+            const newDistance = Math.max(0, prev - decrease)
+            
+            // Calculate ETA to pickup (Your Location)
+            const remainingETA = Math.max(0, Math.round((newDistance / averageSpeed) * 60))
+            setDriverETA(remainingETA)
+            
           return parseFloat(newDistance.toFixed(1))
+          } else {
+            // Driver has arrived at pickup location - stop here
+            setDriverDistance(0)
+            setDriverETA(0)
+            return 0
+          }
         })
       }, updateInterval)
       return () => clearInterval(interval)
-    } else if (!pickup || !destination) {
-      // Keep updating with default simulation when no input
+    } else {
+      // Default simulation when no pickup location
       const interval = setInterval(() => {
         setDriverDistance((prev) => {
           const variation = 0.8 + (Math.random() * 0.4)
@@ -300,7 +321,7 @@ export default function HomePage() {
       }, updateInterval)
       return () => clearInterval(interval)
     }
-  }, [pickup, destination, driverDistance])
+  }, [pickup, driverDistance])
 
   // Animated Stats Counter with Scroll Detection
   const animateCounters = useCallback(() => {
@@ -1039,48 +1060,67 @@ export default function HomePage() {
             </div>
 
             {/* Live Driver Tracking with Smart Updates */}
-            <Card className="w-full max-w-[800px] mx-auto mb-6 border-2 border-primary/20 relative overflow-hidden animate-fade-in">
-                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-primary to-primary-dark"></div>
+            <Card className="w-full max-w-[800px] mx-auto mb-6 border-2 border-primary/30 relative overflow-hidden animate-fade-in shadow-xl bg-gradient-to-br from-white to-gray-50/50">
+                <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-primary via-primary-dark to-primary"></div>
                 
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary-dark rounded-xl flex items-center justify-center text-white shadow-lg">
-                      <Car className="w-6 h-6" />
+                {/* Header Section */}
+                <div className="flex items-center justify-between mb-6 pt-2">
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
+                      <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center text-white shadow-lg ring-2 ring-primary/20">
+                        <Car className="w-7 h-7" />
                     </div>
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                      <MapPin className="w-5 h-5 text-primary animate-pulse" strokeWidth={2.5} />
-                    </div>
-                    <h3 className="text-xl font-bold font-serif">Live Driver Tracking</h3>
+                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-md animate-pulse"></div>
                   </div>
-                  <div className="px-3 py-1 bg-gradient-to-r from-primary/20 to-primary-dark/20 text-primary-dark rounded-full text-xs font-semibold flex items-center gap-1 border border-primary/30">
-                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
-                    Live
+                    <div>
+                      <h3 className="text-2xl font-bold font-serif bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent">
+                        Live Driver Tracking
+                      </h3>
+                      <p className="text-xs text-gray-500 mt-0.5">Real-time location updates</p>
+                    </div>
+                  </div>
+                  <div className="px-4 py-2 bg-gradient-to-r from-primary/15 to-primary-dark/15 text-primary-dark rounded-full text-sm font-bold flex items-center gap-2 border-2 border-primary/30 shadow-md backdrop-blur-sm">
+                    <div className="relative">
+                      <div className="w-3 h-3 bg-primary rounded-full animate-pulse"></div>
+                      <div className="absolute inset-0 bg-primary rounded-full animate-ping opacity-75"></div>
+                    </div>
+                    <span>Live</span>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div className="bg-gradient-to-br from-primary/10 to-primary-dark/10 rounded-lg p-3 border border-primary/30">
-                    <div className="flex items-center gap-2 mb-1">
-                      <MapPin className="w-5 h-5 text-primary" strokeWidth={2.5} />
-                      <span className="text-xs text-gray-700 font-medium">Distance</span>
+                {/* Metrics Grid */}
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div className="relative bg-gradient-to-br from-primary/10 via-primary/5 to-primary-dark/10 rounded-xl p-4 border-2 border-primary/20 shadow-md hover:shadow-lg transition-all duration-300 hover:border-primary/40 group">
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-primary/5 rounded-bl-full"></div>
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center shadow-md">
+                        <MapPin className="w-5 h-5 text-white" strokeWidth={2.5} />
+                      </div>
+                      <span className="text-xs text-gray-600 font-semibold uppercase tracking-wide">Distance</span>
                     </div>
-                    <div className="text-lg font-bold text-primary-dark">
-                      {driverDistance < 0.1 ? '< 0.1' : driverDistance.toFixed(1)} km
+                    <div className="text-2xl font-bold text-primary-dark group-hover:scale-105 transition-transform">
+                      {journeyProgress > 0 
+                        ? (driverDistance < 0.1 ? '< 0.1' : driverDistance.toFixed(1))
+                        : (driverDistance < 0.1 ? '< 0.1' : driverDistance.toFixed(1))
+                      } <span className="text-base text-gray-500">km</span>
                     </div>
                   </div>
-                  <div className="bg-gradient-to-br from-primary/10 to-primary-dark/10 rounded-lg p-3 border border-primary/30">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Clock className="w-4 h-4 text-primary" />
-                      <span className="text-xs text-gray-700 font-medium">Estimated Arrival</span>
+                  <div className="relative bg-gradient-to-br from-primary/10 via-primary/5 to-primary-dark/10 rounded-xl p-4 border-2 border-primary/20 shadow-md hover:shadow-lg transition-all duration-300 hover:border-primary/40 group">
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-primary/5 rounded-bl-full"></div>
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center shadow-md">
+                        <Clock className="w-5 h-5 text-white" strokeWidth={2.5} />
+                      </div>
+                      <span className="text-xs text-gray-600 font-semibold uppercase tracking-wide">Estimated Arrival</span>
                     </div>
-                    <div className="text-lg font-bold text-primary-dark">
-                      {driverETA === 0 ? '< 1 min' : driverETA === 1 ? '1 min' : `${driverETA} min`}
+                    <div className="text-2xl font-bold text-primary-dark group-hover:scale-105 transition-transform">
+                      {driverETA === 0 ? '< 1' : driverETA === 1 ? '1' : driverETA} <span className="text-base text-gray-500">min</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Tracking Map */}
-                <div className="h-48 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl overflow-hidden relative mb-4 border border-gray-300 shadow-inner">
+                <div className="h-56 bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 rounded-xl overflow-hidden relative mb-6 border-2 border-primary/20 shadow-inner">
                   {/* Map-like background with subtle grid */}
                   <div className="absolute inset-0 opacity-20">
                     <div className="absolute inset-0" style={{
@@ -1093,72 +1133,112 @@ export default function HomePage() {
                   <div className="absolute top-1/2 left-0 right-0 h-3 bg-gray-400 transform -translate-y-1/2 shadow-inner">
                     {/* Road center line */}
                     <div className="absolute top-1/2 left-0 right-0 h-0.5 border-t border-dashed border-yellow-300 transform -translate-y-1/2"></div>
-                    {/* Progress indicator */}
+                    {/* Progress indicator - shows driver moving towards Your Location */}
                     <div 
-                      className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary/80 to-primary transition-all duration-3000 ease-linear" 
-                      style={{ width: `${Math.min(100, Math.max(0, 100 - ((driverDistance / 5) * 100)))}%` }}
+                      className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary/80 to-primary transition-all duration-2000 ease-linear" 
+                      style={{ width: `${Math.min(90, Math.max(5, 5 + ((5 - driverDistance) / 5) * 85))}%` }}
                     ></div>
                   </div>
                   
-                  {/* Connection line between driver and user */}
-                  <svg className="absolute inset-0 w-full h-full z-0" style={{ pointerEvents: 'none' }}>
-                    <line 
-                      x1={`${Math.min(85, Math.max(5, 5 + ((5 - driverDistance) / 5) * 80))}%`}
-                      y1="50%"
-                      x2="90%"
-                      y2="50%"
-                      stroke="rgba(212, 175, 55, 0.3)"
-                      strokeWidth="2"
-                      strokeDasharray="5,5"
-                    />
-                  </svg>
+                  {/* Connection line between driver and Your Location */}
+                  {pickup && (
+                    <svg className="absolute inset-0 w-full h-full z-0" style={{ pointerEvents: 'none' }}>
+                      <line 
+                        x1={`${Math.min(90, Math.max(5, 5 + ((5 - driverDistance) / 5) * 85))}%`}
+                        y1="50%"
+                        x2="90%"
+                        y2="50%"
+                        stroke="rgba(212, 175, 55, 0.3)"
+                        strokeWidth="2"
+                        strokeDasharray="5,5"
+                      />
+                    </svg>
+                  )}
                   
-                  {/* User Marker (Pickup Location) - Fixed position */}
+                  {/* Your Location Marker (Pickup) - Right side */}
                   <div className="absolute top-1/2 right-[10%] transform -translate-y-1/2 z-20">
-                    <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary-dark rounded-full shadow-xl border-4 border-white flex items-center justify-center relative">
-                      <MapPin className="w-7 h-7 text-white" strokeWidth={2.5} fill="currentColor" />
-                      {/* Pulse ring */}
-                      <div className="absolute inset-0 bg-primary rounded-full animate-ping opacity-30"></div>
-                    </div>
-                    <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-primary-dark bg-white px-2 py-0.5 rounded shadow-sm whitespace-nowrap border border-primary/20">
-                      Your Location
+                    <div className="relative">
+                      <div className={`w-14 h-14 bg-gradient-to-br ${driverDistance < 0.1 ? 'from-green-500 to-green-600' : 'from-primary to-primary-dark'} rounded-full shadow-2xl border-4 border-white flex items-center justify-center relative ring-2 ${driverDistance < 0.1 ? 'ring-green-300' : 'ring-primary/30'}`}>
+                        {driverDistance < 0.1 ? (
+                          <>
+                            <Check className="w-6 h-6 text-white absolute" strokeWidth={3} />
+                            <div className="absolute inset-0 bg-green-500 rounded-full animate-ping opacity-30"></div>
+                          </>
+                        ) : (
+                          <>
+                            <MapPin className="w-8 h-8 text-white" strokeWidth={2.5} fill="currentColor" />
+                            <div className="absolute inset-0 bg-primary rounded-full animate-ping opacity-30"></div>
+                          </>
+                        )}
+                        <div className="absolute -inset-2 bg-primary/20 rounded-full animate-pulse"></div>
+                      </div>
+                      <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs font-bold text-primary-dark bg-white px-3 py-1.5 rounded-lg shadow-lg whitespace-nowrap border-2 border-primary/30 backdrop-blur-sm">
+                        Your Location
+                      </div>
                     </div>
                   </div>
                   
-                  {/* Driver Marker - Moving */}
+                  {/* Dropoff Location Marker - Only show if destination is set */}
+                  {destination && (
+                    <div className="absolute top-1/4 right-[15%] transform -translate-y-1/2 z-10 opacity-60">
+                      <div className="relative">
+                        <div className="w-10 h-10 bg-gradient-to-br from-gray-400 to-gray-500 rounded-full shadow-lg border-2 border-white flex items-center justify-center relative">
+                          <MapPin className="w-5 h-5 text-white" strokeWidth={2} fill="currentColor" />
+                        </div>
+                        <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-gray-600 bg-white/80 px-2 py-0.5 rounded shadow-sm whitespace-nowrap border border-gray-300 backdrop-blur-sm">
+                          Dropoff
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Driver Marker - Moving towards Your Location */}
                   <div 
-                    className="absolute top-1/2 transform -translate-y-1/2 z-20 transition-all duration-3000 ease-linear"
-                    style={{ left: `${Math.min(85, Math.max(5, 5 + ((5 - driverDistance) / 5) * 80))}%` }}
+                    className="absolute top-1/2 transform -translate-y-1/2 z-20 transition-all duration-2000 ease-linear"
+                    style={{ 
+                      left: `${Math.min(90, Math.max(5, 5 + ((5 - driverDistance) / 5) * 85))}%`
+                    }}
                   >
-                    <div className="w-10 h-10 bg-primary rounded-full shadow-xl border-2 border-white flex items-center justify-center relative">
-                      <Car className="w-6 h-6 text-white" />
-                      {/* Pulse ring for live tracking */}
-                      <div className="absolute inset-0 bg-primary rounded-full animate-ping opacity-40"></div>
+                    <div className="relative">
+                      <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary-dark rounded-full shadow-2xl border-[3px] border-white flex items-center justify-center relative ring-2 ring-primary/30">
+                        <Car className="w-7 h-7 text-white" strokeWidth={2.5} />
+                        {/* Pulse rings for live tracking */}
+                        <div className="absolute inset-0 bg-primary rounded-full animate-ping opacity-40"></div>
+                        <div className="absolute -inset-2 bg-primary/20 rounded-full animate-pulse"></div>
                   </div>
-                    <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-primary bg-white px-2 py-0.5 rounded shadow-sm whitespace-nowrap">
-                      Driver
+                      <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs font-bold text-primary bg-white px-3 py-1.5 rounded-lg shadow-lg whitespace-nowrap border-2 border-primary/30 backdrop-blur-sm">
+                        Driver
+                      </div>
                   </div>
                 </div>
 
                   {/* Status Message */}
-                  <div className="absolute bottom-3 left-0 right-0 text-center">
-                    <div className="inline-block bg-white/95 backdrop-blur-sm px-4 py-2 rounded-lg shadow-md border border-primary/20">
-                      <p className="text-xs font-semibold text-primary-dark">
-                        {driverDistance < 0.1 
-                          ? '✓ Driver has arrived at pickup location' 
-                          : driverDistance < 0.3 
-                          ? 'Driver is approaching your location' 
-                          : driverDistance < 0.8 
-                          ? 'Driver is nearby, please be ready' 
-                          : driverDistance < 1.5 
-                          ? 'Driver is less than 2 minutes away' 
-                          : driverDistance < 3 
-                          ? 'Driver is on the way to pickup' 
+                  <div className="absolute bottom-4 left-0 right-0 text-center z-30">
+                    <div className="inline-flex items-center gap-2 bg-gradient-to-r from-white via-white to-white/95 backdrop-blur-md px-5 py-3 rounded-xl shadow-xl border-2 border-primary/30">
+                      {driverDistance < 0.1 && (
+                        <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                          <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                  </div>
+                      )}
+                      {driverDistance >= 0.1 && (
+                        <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+                      )}
+                      <p className="text-sm font-bold text-primary-dark">
+                        {driverDistance < 0.1
+                          ? '✓ Driver has arrived at your location'
+                          : driverDistance < 0.3
+                          ? 'Driver is approaching your location'
+                          : driverDistance < 0.8
+                          ? 'Driver is nearby, please be ready'
+                          : driverDistance < 1.5
+                          ? 'Driver is less than 2 minutes away'
+                          : driverDistance < 3
+                          ? 'Driver is on the way'
                           : 'Driver is heading to your location'}
                       </p>
                   </div>
                   </div>
-                  </div>
+                </div>
 
               </Card>
 
@@ -1219,6 +1299,21 @@ export default function HomePage() {
                         <div className="absolute top-3 right-3 z-20">
                           <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary-dark rounded-lg flex items-center justify-center text-white shadow-lg">
                             <Car className="w-4 h-4" />
+                          </div>
+                </div>
+                
+                        {/* Classic Taxi Roof Sign - Professional placement in center, slightly higher */}
+                        <div className="absolute top-[28%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
+                          <div className="relative">
+                            <div className="bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600 rounded-lg px-3 py-2 sm:px-4 sm:py-2.5 md:px-5 md:py-3 shadow-2xl border-2 border-yellow-300/50 backdrop-blur-sm">
+                              <div className="flex items-center gap-1.5 sm:gap-2">
+                                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse"></div>
+                                <span className="text-white font-bold text-xs sm:text-sm md:text-base tracking-wider">TAXI</span>
+                                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
+                              </div>
+                            </div>
+                            {/* Glow effect */}
+                            <div className="absolute inset-0 bg-yellow-400 rounded-lg animate-pulse opacity-30 blur-sm -z-10"></div>
                           </div>
                         </div>
                         <div className="flex items-center justify-between mb-3">
@@ -1360,8 +1455,8 @@ export default function HomePage() {
                         {vehicle.badge}
                       </div>
                       {selectedVehicle === vehicle.type && (
-                        <div className="absolute top-2 right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center shadow-lg animate-bounce">
-                          <span className="text-white text-sm">✓</span>
+                        <div className="absolute top-2 right-2 w-10 h-10 rounded-full bg-gradient-to-r from-primary to-primary-dark flex items-center justify-center shadow-lg ring-2 ring-primary/30 animate-bounce">
+                          <Check className="w-7 h-7 text-white" strokeWidth={4} />
                         </div>
                       )}
                     </div>
@@ -1390,6 +1485,13 @@ export default function HomePage() {
                     </div>
                   </button>
                 ))}
+              </div>
+
+              {/* Taxi Animation - Professional placement after vehicle grid, showing the ride is coming */}
+              <div className="flex justify-center my-6 mb-8 animate-fade-in">
+                <div className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl">
+                  <TaxiAnimation />
+                </div>
               </div>
 
               {/* Selected Vehicle Info with Smart Details */}
@@ -3231,7 +3333,7 @@ export default function HomePage() {
                 {/* View All Trips Link */}
                 <div className="mt-4 pt-4 border-t border-gray-200">
                   <Link href="/trips">
-                    <button className="w-full text-center text-sm font-semibold text-primary hover:text-primary-dark transition-colors">
+                    <button className="w-full text-center text-sm font-semibold bg-white text-primary hover:bg-gray-50 hover:text-primary-dark transition-colors px-4 py-2 rounded-lg border border-gray-200 shadow-sm">
                       View All Trip History →
                     </button>
                   </Link>
@@ -3424,10 +3526,10 @@ export default function HomePage() {
                       </div>
                       <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-serif bg-gradient-to-r from-primary via-primary-dark to-primary bg-clip-text text-transparent">
                         What Our Customers Say
-                      </h2>
-                    </div>
+                    </h2>
                   </div>
                 </div>
+                    </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {[
                     { 
@@ -3566,6 +3668,22 @@ export default function HomePage() {
                           <source src="/app-demo.mp4" type="video/mp4" />
                           Your browser does not support the video tag.
                         </video>
+                        
+                        {/* Classic Taxi Roof Sign - Professional placement at top center */}
+                        <div className="absolute top-3 sm:top-4 left-1/2 transform -translate-x-1/2 z-20">
+                          <div className="relative">
+                            <div className="bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600 rounded-lg px-3 py-2 sm:px-4 sm:py-2.5 md:px-5 md:py-3 shadow-2xl border-2 border-yellow-300/50 backdrop-blur-sm">
+                              <div className="flex items-center gap-1.5 sm:gap-2">
+                                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse"></div>
+                                <span className="text-white font-bold text-xs sm:text-sm md:text-base tracking-wider">TAXI</span>
+                                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
+                              </div>
+                            </div>
+                            {/* Glow effect */}
+                            <div className="absolute inset-0 bg-yellow-400 rounded-lg animate-pulse opacity-30 blur-sm -z-10"></div>
+                          </div>
+                        </div>
+                        
                         {/* Custom Play Button Overlay */}
                         {showVideoPlayButton && (
                           <div

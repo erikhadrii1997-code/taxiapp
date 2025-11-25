@@ -12,6 +12,7 @@ import Card from '@/components/ui/Card'
 import toast from 'react-hot-toast'
 import { VehicleType, Vehicle } from '@/types'
 import { formatCurrency } from '@/lib/utils'
+import TaxiAnimation from '@/components/ui/TaxiAnimation'
 
 // Dynamically import map component to avoid SSR issues
 const MapComponent = dynamic(() => import('@/components/map/BookingMap'), {
@@ -21,31 +22,31 @@ const MapComponent = dynamic(() => import('@/components/map/BookingMap'), {
 const vehicles: Vehicle[] = [
   {
     type: 'standard',
-    name: 'Standard Sedan',
-    ratePerKm: 2.5,
+    name: 'Standard',
+    ratePerKm: 3.50, // Las Vegas Luxury Sedan (Mercedes S-Class): $140/hour = $3.50/km
     capacity: 4,
-    image: 'https://images.pexels.com/photos/1719648/pexels-photo-1719648.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: 'https://alphazug.com/wp-content/uploads/2020/11/800px-Rolls-Royce_Phantom_VIII_Genf_2019_1Y7A5148.jpg',
   },
   {
     type: 'premium',
-    name: 'Premium SUV',
-    ratePerKm: 3.5,
-    capacity: 6,
-    image: 'https://images.pexels.com/photos/3764988/pexels-photo-3764988.jpeg?auto=compress&cs=tinysrgb&w=800',
+    name: 'Premium',
+    ratePerKm: 5.00, // Las Vegas Super Luxury (Rolls Royce level): Premium luxury rate
+    capacity: 4,
+    image: 'https://grandex.de/wp-content/uploads/2025/02/1732025731_a2ffe1f614e25c297f73-17.jpg',
   },
   {
     type: 'luxury',
-    name: 'Luxury Van',
-    ratePerKm: 4.0,
-    capacity: 8,
-    image: 'https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg?auto=compress&cs=tinysrgb&w=800',
+    name: 'SUV',
+    ratePerKm: 4.50, // Las Vegas Premium SUV (Escalade, Navigator): $175/hour = $4.38/km
+    capacity: 6,
+    image: 'https://media.istockphoto.com/id/1348551471/photo/night-photo-of-a-cadillac-escalade-luxury-suv-limo-used-for-uber-and-lyft.jpg?s=612x612&w=0&k=20&c=o6z49qXSxzjUm6JR8ml2QQNxs1E1oBgJOktZwYAWkZo=',
   },
   {
     type: 'xl',
-    name: 'XL Executive',
-    ratePerKm: 5.0,
-    capacity: 10,
-    image: 'https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=800',
+    name: 'XL',
+    ratePerKm: 6.00, // Las Vegas Executive Van (Sprinter): $400/hour = $10/km (adjusted for per-km pricing)
+    capacity: 8,
+    image: 'https://www.topgear.com/sites/default/files/2024/02/2024-cadillac-escalade-v-series-010.jpg',
   },
 ]
 
@@ -222,6 +223,13 @@ export default function BookPage() {
               ))}
             </div>
 
+            {/* Taxi Animation - Professional placement visible throughout booking process */}
+            <div className="flex justify-center mb-8 animate-fade-in">
+              <div className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl">
+                <TaxiAnimation />
+              </div>
+            </div>
+
             {/* Step 1: Location */}
             {currentStep === 1 && (
               <div className="space-y-6 animate-fade-in">
@@ -258,7 +266,8 @@ export default function BookPage() {
             {/* Step 2: Vehicle Selection */}
             {currentStep === 2 && (
               <div className="space-y-6 animate-fade-in">
-                <h2 className="text-2xl font-bold font-serif mb-4">Select Vehicle</h2>
+                <h2 className="text-2xl font-bold font-serif mb-4 text-center">Select Vehicle</h2>
+                
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {vehicles.map((vehicle) => (
                     <div
@@ -266,8 +275,8 @@ export default function BookPage() {
                       onClick={() => setSelectedVehicle(vehicle.type)}
                       className={`p-6 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
                         selectedVehicle === vehicle.type
-                          ? 'border-primary bg-primary/5 shadow-lg'
-                          : 'border-gray-200 hover:border-primary/50 hover:shadow-md'
+                          ? 'border-primary bg-gray-100 shadow-lg'
+                          : 'border-gray-300 bg-gray-100 hover:border-primary/50 hover:shadow-md'
                       }`}
                     >
                       <img
@@ -280,9 +289,11 @@ export default function BookPage() {
                         {formatCurrency(vehicle.ratePerKm)}/km • {vehicle.capacity} seats
                       </p>
                       {selectedVehicle === vehicle.type && (
-                        <div className="mt-4 text-primary font-semibold flex items-center">
-                          <Check className="w-5 h-5 mr-2" />
-                          Selected
+                        <div className="mt-4 text-primary font-semibold flex items-center gap-2">
+                          <div className="relative w-10 h-10 rounded-full bg-gradient-to-r from-primary to-primary-dark flex items-center justify-center shadow-lg ring-2 ring-primary/30">
+                            <Check className="w-7 h-7 text-white" strokeWidth={4} />
+                          </div>
+                          <span className="text-lg font-bold">Selected</span>
                         </div>
                       )}
                     </div>
@@ -305,7 +316,7 @@ export default function BookPage() {
             {/* Step 3: Confirmation */}
             {currentStep === 3 && (
               <div className="space-y-6 animate-fade-in">
-                <h2 className="text-2xl font-bold font-serif mb-4">Confirm Your Booking</h2>
+                <h2 className="text-2xl font-bold font-serif mb-4 text-center">Confirm Your Booking</h2>
 
                 {/* Map */}
                 <div className="h-64 w-full rounded-xl overflow-hidden mb-6">

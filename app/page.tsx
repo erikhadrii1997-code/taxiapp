@@ -1159,8 +1159,8 @@ export default function HomePage() {
 
               </Card>
 
-            {/* New Vehicle Slider - Full Width with Photos Filling Sides */}
-            <div className="w-full mb-6">
+            {/* New Vehicle Slider - Matching Choose Your Ride Width */}
+            <div className="w-full max-w-[800px] mx-auto mb-6">
               <div 
                 className="relative w-full overflow-hidden rounded-2xl shadow-xl border border-gray-200"
                 onTouchStart={handleSliderTouchStart}
@@ -1193,7 +1193,7 @@ export default function HomePage() {
                         }}
                         loading={index === carouselIndex ? 'eager' : 'lazy'}
                         fetchPriority={index === carouselIndex ? 'high' : 'auto'}
-                        sizes="100vw"
+                        sizes="(max-width: 640px) 100vw, 800px"
                       />
                       
                       {/* Gradient Overlay */}

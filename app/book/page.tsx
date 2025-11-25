@@ -23,28 +23,28 @@ const vehicles: Vehicle[] = [
   {
     type: 'standard',
     name: 'Standard',
-    ratePerKm: 3.50, // Las Vegas Luxury Sedan (Mercedes S-Class): $140/hour = $3.50/km
+    ratePerKm: 10.00,
     capacity: 4,
     image: 'https://alphazug.com/wp-content/uploads/2020/11/800px-Rolls-Royce_Phantom_VIII_Genf_2019_1Y7A5148.jpg',
   },
   {
     type: 'premium',
     name: 'Premium',
-    ratePerKm: 5.00, // Las Vegas Super Luxury (Rolls Royce level): Premium luxury rate
+    ratePerKm: 12.00,
     capacity: 4,
     image: 'https://grandex.de/wp-content/uploads/2025/02/1732025731_a2ffe1f614e25c297f73-17.jpg',
   },
   {
     type: 'luxury',
     name: 'SUV',
-    ratePerKm: 4.50, // Las Vegas Premium SUV (Escalade, Navigator): $175/hour = $4.38/km
+    ratePerKm: 14.00,
     capacity: 6,
     image: 'https://media.istockphoto.com/id/1348551471/photo/night-photo-of-a-cadillac-escalade-luxury-suv-limo-used-for-uber-and-lyft.jpg?s=612x612&w=0&k=20&c=o6z49qXSxzjUm6JR8ml2QQNxs1E1oBgJOktZwYAWkZo=',
   },
   {
     type: 'xl',
     name: 'XL',
-    ratePerKm: 6.00, // Las Vegas Executive Van (Sprinter): $400/hour = $10/km (adjusted for per-km pricing)
+    ratePerKm: 16.00,
     capacity: 8,
     image: 'https://www.topgear.com/sites/default/files/2024/02/2024-cadillac-escalade-v-series-010.jpg',
   },

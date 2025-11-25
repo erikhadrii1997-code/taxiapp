@@ -24,7 +24,7 @@ const vehicles = [
   {
     type: 'standard' as VehicleType,
     name: 'Standard',
-    ratePerKm: 3.50, // Las Vegas Luxury Sedan (Mercedes S-Class): $140/hour = $3.50/km
+    ratePerKm: 10.00,
     capacity: 4,
     time: '~12 min',
     image: 'https://alphazug.com/wp-content/uploads/2020/11/800px-Rolls-Royce_Phantom_VIII_Genf_2019_1Y7A5148.jpg',
@@ -38,7 +38,7 @@ const vehicles = [
   {
     type: 'premium' as VehicleType,
     name: 'Premium',
-    ratePerKm: 5.00, // Las Vegas Super Luxury (Rolls Royce level): Premium luxury rate
+    ratePerKm: 12.00,
     capacity: 4,
     time: '~10 min',
     image: 'https://grandex.de/wp-content/uploads/2025/02/1732025731_a2ffe1f614e25c297f73-17.jpg',
@@ -52,7 +52,7 @@ const vehicles = [
   {
     type: 'luxury' as VehicleType,
     name: 'SUV',
-    ratePerKm: 4.50, // Las Vegas Premium SUV (Escalade, Navigator): $175/hour = $4.38/km
+    ratePerKm: 14.00,
     capacity: 6,
     time: '~11 min',
     image: 'https://media.istockphoto.com/id/1348551471/photo/night-photo-of-a-cadillac-escalade-luxury-suv-limo-used-for-uber-and-lyft.jpg?s=612x612&w=0&k=20&c=o6z49qXSxzjUm6JR8ml2QQNxs1E1oBgJOktZwYAWkZo=',
@@ -66,7 +66,7 @@ const vehicles = [
   {
     type: 'xl' as VehicleType,
     name: 'XL',
-    ratePerKm: 6.00, // Las Vegas Executive Van (Sprinter): $400/hour = $10/km (adjusted for per-km pricing)
+    ratePerKm: 16.00,
     capacity: 8,
     time: '~9 min',
     image: 'https://www.topgear.com/sites/default/files/2024/02/2024-cadillac-escalade-v-series-010.jpg',
@@ -1208,36 +1208,36 @@ export default function HomePage() {
                   </div>
                       <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs font-bold text-primary bg-white px-3 py-1.5 rounded-lg shadow-lg whitespace-nowrap border-2 border-primary/30 backdrop-blur-sm">
                         Driver
-                      </div>
                   </div>
                 </div>
-
-                  {/* Status Message */}
-                  <div className="absolute bottom-4 left-0 right-0 text-center z-30">
-                    <div className="inline-flex items-center gap-2 bg-gradient-to-r from-white via-white to-white/95 backdrop-blur-md px-5 py-3 rounded-xl shadow-xl border-2 border-primary/30">
-                      {driverDistance < 0.1 && (
-                        <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-                          <Check className="w-3 h-3 text-white" strokeWidth={3} />
-                  </div>
-                      )}
-                      {driverDistance >= 0.1 && (
-                        <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
-                      )}
-                      <p className="text-sm font-bold text-primary-dark">
-                        {driverDistance < 0.1
-                          ? '✓ Driver has arrived at your location'
-                          : driverDistance < 0.3
-                          ? 'Driver is approaching your location'
-                          : driverDistance < 0.8
-                          ? 'Driver is nearby, please be ready'
-                          : driverDistance < 1.5
-                          ? 'Driver is less than 2 minutes away'
-                          : driverDistance < 3
-                          ? 'Driver is on the way'
-                          : 'Driver is heading to your location'}
-                      </p>
                   </div>
                   </div>
+                
+                {/* Status Message - Separated below the map */}
+                <div className="mt-4 sm:mt-6 text-center">
+                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-white via-white to-white/95 backdrop-blur-md px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl shadow-xl border-2 border-primary/30">
+                    {driverDistance < 0.1 && (
+                      <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                        <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                  </div>
+                    )}
+                    {driverDistance >= 0.1 && (
+                      <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+                    )}
+                    <p className="text-xs sm:text-sm font-bold text-primary-dark">
+                      {driverDistance < 0.1
+                        ? '✓ Driver has arrived at your location'
+                        : driverDistance < 0.3
+                        ? 'Driver is approaching your location'
+                        : driverDistance < 0.8
+                        ? 'Driver is nearby, please be ready'
+                        : driverDistance < 1.5
+                        ? 'Driver is less than 2 minutes away'
+                        : driverDistance < 3
+                        ? 'Driver is on the way'
+                        : 'Driver is heading to your location'}
+                    </p>
+                </div>
                 </div>
 
               </Card>
@@ -1316,19 +1316,16 @@ export default function HomePage() {
                             <div className="absolute inset-0 bg-yellow-400 rounded-lg animate-pulse opacity-30 blur-sm -z-10"></div>
                           </div>
                         </div>
-                        <div className="flex items-center justify-between mb-3">
+                        <div className="mb-3">
                           <div>
                             <div className="font-bold text-xl sm:text-2xl md:text-3xl mb-1">{vehicle.name}</div>
                             <div className="text-base sm:text-lg md:text-xl opacity-90 font-semibold">
                               {formatCurrency(vehicle.ratePerKm)}/km
                             </div>
                           </div>
-                          <div className="bg-black/70 backdrop-blur-sm text-white text-xs sm:text-sm px-3 py-1.5 rounded-full font-semibold">
-                            {vehicle.badge}
-                          </div>
                         </div>
                         {/* Vehicle Features */}
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-2 mb-3">
                           {vehicle.features.slice(0, 3).map((feature, idx) => (
                             <span key={idx} className="text-xs sm:text-sm bg-white/30 backdrop-blur-sm px-3 py-1 rounded-full font-medium">
                               {feature}

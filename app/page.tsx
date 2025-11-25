@@ -1039,7 +1039,7 @@ export default function HomePage() {
             </div>
 
             {/* Live Driver Tracking with Smart Updates */}
-            <Card className="w-full max-w-[500px] mb-6 border-2 border-primary/20 relative overflow-hidden animate-fade-in">
+            <Card className="w-full max-w-[800px] mx-auto mb-6 border-2 border-primary/20 relative overflow-hidden animate-fade-in">
                 <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-primary to-primary-dark"></div>
                 
                 <div className="flex items-center justify-between mb-4">

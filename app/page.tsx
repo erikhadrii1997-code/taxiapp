@@ -1275,19 +1275,7 @@ export default function HomePage() {
             </div>
 
             {/* Smart Vehicle Selection */}
-            <div className="w-full max-w-[800px] mx-auto mb-6 relative group">
-              {/* Stylish Brand Color Decorative Layer */}
-              <div className="absolute -inset-2 bg-gradient-to-r from-primary via-primary-dark to-primary rounded-3xl opacity-20 blur-sm group-hover:opacity-30 transition-opacity duration-300"></div>
-              <div className="absolute -inset-1 bg-gradient-to-br from-primary/30 via-primary-dark/20 to-primary/30 rounded-3xl border-2 border-primary/40"></div>
-              <div className="absolute inset-0 rounded-2xl border-4 border-primary/50 shadow-2xl shadow-primary/20"></div>
-              
-              {/* Decorative Corner Accents */}
-              <div className="absolute -top-1 -left-1 w-8 h-8 border-t-4 border-l-4 border-primary rounded-tl-2xl opacity-60"></div>
-              <div className="absolute -top-1 -right-1 w-8 h-8 border-t-4 border-r-4 border-primary rounded-tr-2xl opacity-60"></div>
-              <div className="absolute -bottom-1 -left-1 w-8 h-8 border-b-4 border-l-4 border-primary rounded-bl-2xl opacity-60"></div>
-              <div className="absolute -bottom-1 -right-1 w-8 h-8 border-b-4 border-r-4 border-primary rounded-br-2xl opacity-60"></div>
-              
-            <Card className="w-full relative overflow-hidden border-2 border-primary/30 bg-white">
+            <Card className="w-full max-w-[800px] mb-6 relative overflow-hidden">
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-primary-dark"></div>
               
               <div className="text-center mb-6">
@@ -1320,12 +1308,8 @@ export default function HomePage() {
                     return b.popularity - a.popularity
                   })
                   .map((vehicle) => (
-                  <div key={vehicle.type} className="relative group/card">
-                    {/* Stylish Brand Color Decorative Layer for Vehicle Card */}
-                    <div className="absolute -inset-1.5 bg-gradient-to-r from-primary via-primary-dark to-primary rounded-2xl opacity-15 blur-sm group-hover/card:opacity-25 transition-opacity duration-300"></div>
-                    <div className="absolute -inset-0.5 bg-gradient-to-br from-primary/20 via-primary-dark/10 to-primary/20 rounded-2xl border border-primary/30"></div>
-                    
                   <button
+                    key={vehicle.type}
                     onClick={() => handleVehicleSelect(vehicle.type)}
                     className={`
                       relative p-4 md:p-4 rounded-2xl transition-all duration-300 overflow-hidden group w-full
@@ -1333,7 +1317,7 @@ export default function HomePage() {
                         ? 'bg-primary/10 border-2 border-primary shadow-lg transform scale-105 ring-2 ring-primary/50'
                         : recommendedVehicle === vehicle.type && !selectedVehicle
                         ? 'bg-primary/5 border-2 border-primary/50 shadow-md hover:border-primary'
-                          : 'bg-cream border-2 border-primary/30 hover:border-primary/50 hover:shadow-md'
+                        : 'bg-cream border-2 border-gray-200 hover:border-primary/50 hover:shadow-md'
                       }
                     `}
                   >
@@ -1394,7 +1378,6 @@ export default function HomePage() {
                       </div>
                     </div>
                   </button>
-                  </div>
                 ))}
               </div>
 
@@ -3411,7 +3394,6 @@ export default function HomePage() {
                 </Card>
               )}
             </Card>
-            </div>
 
             {/* Testimonials Section */}
             <section className="py-12 sm:py-16 w-full mt-12">

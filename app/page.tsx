@@ -1159,8 +1159,8 @@ export default function HomePage() {
 
               </Card>
 
-            {/* New Vehicle Slider - Matching Choose Your Ride Width */}
-            <div className="w-full max-w-[800px] mx-auto mb-6">
+            {/* New Vehicle Slider - Full Width with Photos Filling Sides */}
+            <div className="w-full mb-6">
               <div 
                 className="relative w-full overflow-hidden rounded-2xl shadow-xl border border-gray-200"
                 onTouchStart={handleSliderTouchStart}
@@ -1178,22 +1178,22 @@ export default function HomePage() {
                   {vehicles.map((vehicle, index) => (
                     <div 
                       key={vehicle.type} 
-                      className="min-w-full w-full h-full relative flex-shrink-0 flex items-center justify-center bg-gray-100"
+                      className="min-w-full w-full h-full relative flex-shrink-0"
                     >
-                      {/* Full Photo - 100% Fit */}
+                      {/* Full Photo - Filling Entire Space Including Sides */}
                       <img
                         src={vehicle.image}
                         alt={vehicle.name}
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-cover"
                         style={{ 
                           width: '100%',
                           height: '100%',
                           display: 'block',
-                          objectFit: 'contain'
+                          objectFit: 'cover'
                         }}
                         loading={index === carouselIndex ? 'eager' : 'lazy'}
                         fetchPriority={index === carouselIndex ? 'high' : 'auto'}
-                        sizes="(max-width: 640px) 100vw, 800px"
+                        sizes="100vw"
                       />
                       
                       {/* Gradient Overlay */}

@@ -10,7 +10,9 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, label, error, icon, ...props }, ref) => {
+  ({ className, label, error, icon, type, ...props }, ref) => {
+    const isDateTimeLocal = type === 'datetime-local'
+    
     return (
       <div className="w-full">
         {label && (
@@ -20,19 +22,27 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         <div className="relative">
           {icon && (
-            <div className="absolute left-3 sm:left-3 md:left-4 top-1/2 transform -translate-y-1/2 text-primary z-10 pointer-events-none">
+            <div className={cn(
+              'absolute top-1/2 transform -translate-y-1/2 text-primary z-10 pointer-events-none',
+              isDateTimeLocal 
+                ? 'left-3 md:left-4' // Mobile: left-3, Desktop: left-4
+                : 'left-3 sm:left-3 md:left-4'
+            )}>
               {icon}
             </div>
           )}
           <input
             ref={ref}
+            type={type}
             className={cn(
               'w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900',
               'placeholder:text-gray-400',
               'focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent',
               'transition-all duration-200',
               'shadow-sm hover:shadow-md',
-              icon && 'pl-14 sm:pl-14 md:pl-12',
+              icon && isDateTimeLocal 
+                ? 'pl-16 md:pl-12' // Mobile: more padding (pl-16), Desktop: normal (pl-12)
+                : icon && 'pl-14 sm:pl-14 md:pl-12',
               error && 'border-red-500 focus:ring-red-500',
               className
             )}

@@ -1160,9 +1160,20 @@ export default function HomePage() {
               </Card>
 
             {/* New Vehicle Slider - Matching Choose Your Ride Width */}
-            <div className="w-full max-w-[800px] mx-auto mb-6">
+            <div className="w-full max-w-[800px] mx-auto mb-6 relative group">
+              {/* Stylish Brand Color Decorative Layer */}
+              <div className="absolute -inset-2 bg-gradient-to-r from-primary via-primary-dark to-primary rounded-3xl opacity-20 blur-sm group-hover:opacity-30 transition-opacity duration-300"></div>
+              <div className="absolute -inset-1 bg-gradient-to-br from-primary/30 via-primary-dark/20 to-primary/30 rounded-3xl border-2 border-primary/40"></div>
+              <div className="absolute inset-0 rounded-2xl border-4 border-primary/50 shadow-2xl shadow-primary/20"></div>
+              
+              {/* Decorative Corner Accents */}
+              <div className="absolute -top-1 -left-1 w-8 h-8 border-t-4 border-l-4 border-primary rounded-tl-2xl opacity-60"></div>
+              <div className="absolute -top-1 -right-1 w-8 h-8 border-t-4 border-r-4 border-primary rounded-tr-2xl opacity-60"></div>
+              <div className="absolute -bottom-1 -left-1 w-8 h-8 border-b-4 border-l-4 border-primary rounded-bl-2xl opacity-60"></div>
+              <div className="absolute -bottom-1 -right-1 w-8 h-8 border-b-4 border-r-4 border-primary rounded-br-2xl opacity-60"></div>
+              
               <div 
-                className="relative w-full overflow-hidden rounded-2xl shadow-xl border border-gray-200"
+                className="relative w-full overflow-hidden rounded-2xl shadow-xl border-2 border-primary/30 bg-white"
                 onTouchStart={handleSliderTouchStart}
                 onTouchMove={handleSliderTouchMove}
                 onTouchEnd={handleSliderTouchEnd}

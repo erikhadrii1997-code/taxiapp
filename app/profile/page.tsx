@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { User as UserIcon, Mail, Phone, Camera } from 'lucide-react'
+import { User as UserIcon, Mail, Phone, Camera, Car } from 'lucide-react'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Card from '@/components/ui/Card'
@@ -93,9 +93,14 @@ export default function ProfilePage() {
               
               {/* Text */}
               <div className="relative z-10 text-center">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-serif bg-gradient-to-r from-primary via-primary-dark to-primary bg-clip-text text-transparent mb-1">
-                  Profile
-                </h1>
+                <div className="flex items-center justify-center gap-3 mb-1">
+                  <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary-dark rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <Car className="w-6 h-6" />
+                  </div>
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-serif bg-gradient-to-r from-primary via-primary-dark to-primary bg-clip-text text-transparent">
+                    Profile
+                  </h1>
+                </div>
                 <p className="text-gray-600 text-sm md:text-base">Manage your account information</p>
               </div>
             </div>

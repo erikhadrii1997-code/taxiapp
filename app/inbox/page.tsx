@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Bell, Check, X } from 'lucide-react'
+import { Bell, Check, X, Car } from 'lucide-react'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Card from '@/components/ui/Card'
@@ -56,6 +56,9 @@ export default function InboxPage() {
               {/* Text */}
               <div className="relative z-10 text-center">
                 <div className="flex items-center justify-center gap-3 mb-1">
+                  <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary-dark rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <Car className="w-6 h-6" />
+                  </div>
                   <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-serif bg-gradient-to-r from-primary via-primary-dark to-primary bg-clip-text text-transparent">
                     Inbox
                   </h1>

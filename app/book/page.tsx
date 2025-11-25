@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
-import { MapPin, Calendar, ChevronRight, ChevronLeft, Check } from 'lucide-react'
+import { MapPin, Calendar, ChevronRight, ChevronLeft, Check, Car } from 'lucide-react'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Button from '@/components/ui/Button'
@@ -180,9 +180,14 @@ export default function BookPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <Card className="mb-8">
             <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold font-serif mb-2 bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent">
-                Book Your Ride
-              </h1>
+              <div className="flex items-center justify-center gap-3 mb-2">
+                <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary-dark rounded-xl flex items-center justify-center text-white shadow-lg">
+                  <Car className="w-6 h-6" />
+                </div>
+                <h1 className="text-4xl font-bold font-serif bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent">
+                  Book Your Ride
+                </h1>
+              </div>
               <p className="text-gray-600">Choose your perfect vehicle and get on the road</p>
             </div>
 

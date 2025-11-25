@@ -51,9 +51,14 @@ export default function TripsPage() {
               
               {/* Text */}
               <div className="relative z-10 text-center">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-serif bg-gradient-to-r from-primary via-primary-dark to-primary bg-clip-text text-transparent mb-1">
-                  Trip History
-                </h1>
+                <div className="flex items-center justify-center gap-3 mb-1">
+                  <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary-dark rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <Car className="w-6 h-6" />
+                  </div>
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-serif bg-gradient-to-r from-primary via-primary-dark to-primary bg-clip-text text-transparent">
+                    Trip History
+                  </h1>
+                </div>
                 <p className="text-gray-600 text-sm md:text-base">View your past and upcoming rides</p>
               </div>
             </div>

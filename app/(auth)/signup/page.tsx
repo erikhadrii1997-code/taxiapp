@@ -119,9 +119,14 @@ export default function SignupPage() {
           {/* Content Section with Solid Background */}
           <div className="bg-cream px-6 pb-6 pt-6">
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold font-serif mb-2 bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent">
-              Create Account
-            </h1>
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary-dark rounded-xl flex items-center justify-center text-white shadow-lg">
+                <Car className="w-6 h-6" />
+              </div>
+              <h1 className="text-4xl font-bold font-serif bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent">
+                Create Account
+              </h1>
+            </div>
             <p className="text-gray-600">Join Luxride today</p>
           </div>
 

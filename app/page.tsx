@@ -1044,6 +1044,9 @@ export default function HomePage() {
                 
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary-dark rounded-xl flex items-center justify-center text-white shadow-lg">
+                      <Car className="w-6 h-6" />
+                    </div>
                     <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
                       <MapPin className="w-5 h-5 text-primary animate-pulse" strokeWidth={2.5} />
                     </div>
@@ -1212,6 +1215,12 @@ export default function HomePage() {
                       
                       {/* Vehicle Info Overlay - Top Position */}
                       <div className="absolute top-0 left-0 right-0 p-4 sm:p-6 text-white z-10">
+                        {/* Luxride Icon */}
+                        <div className="absolute top-3 right-3 z-20">
+                          <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary-dark rounded-lg flex items-center justify-center text-white shadow-lg">
+                            <Car className="w-4 h-4" />
+                          </div>
+                        </div>
                         <div className="flex items-center justify-between mb-3">
                           <div>
                             <div className="font-bold text-xl sm:text-2xl md:text-3xl mb-1">{vehicle.name}</div>
@@ -1280,7 +1289,9 @@ export default function HomePage() {
               
               <div className="text-center mb-6">
                 <div className="flex items-center justify-center gap-3 mb-3">
-                  <Car className="w-8 h-8 text-primary animate-pulse" />
+                  <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary-dark rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <Car className="w-6 h-6" />
+                  </div>
                   <h3 className="text-3xl font-bold font-serif">Choose Your Ride</h3>
                 </div>
                 <div className="w-24 h-1 bg-gradient-to-r from-primary to-primary-dark mx-auto mb-4 rounded-full"></div>
@@ -1693,6 +1704,9 @@ export default function HomePage() {
               <Card className="mt-4 sm:mt-6 animate-fade-in border-2 border-primary/20">
                 <div className="mb-4">
                   <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary-dark rounded-xl flex items-center justify-center text-white shadow-lg">
+                      <Car className="w-6 h-6" />
+                    </div>
                     <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary-dark rounded-full flex items-center justify-center shadow-lg">
                       <Navigation className="w-5 h-5 text-white" />
                     </div>
@@ -1767,6 +1781,9 @@ export default function HomePage() {
               <Card className="mt-4 sm:mt-6 animate-fade-in border-2 border-primary/20">
                 <div className="mb-4 sm:mb-6">
                   <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary-dark rounded-xl flex items-center justify-center text-white shadow-lg">
+                      <Car className="w-6 h-6" />
+                    </div>
                     <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary-dark rounded-full flex items-center justify-center shadow-lg">
                       <MapPin className="w-5 h-5 text-white" />
                     </div>
@@ -3401,9 +3418,14 @@ export default function HomePage() {
                 <div className="flex items-center justify-center mb-8 sm:mb-12">
                   <div className="relative px-4 py-2 bg-cream rounded-xl border border-primary/20 shadow-md">
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary-dark/5 rounded-xl"></div>
-                    <h2 className="relative z-10 text-2xl sm:text-3xl md:text-4xl font-extrabold font-serif bg-gradient-to-r from-primary via-primary-dark to-primary bg-clip-text text-transparent">
-                      What Our Customers Say
-                    </h2>
+                    <div className="relative z-10 flex items-center justify-center gap-3">
+                      <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary-dark rounded-xl flex items-center justify-center text-white shadow-lg">
+                        <Car className="w-6 h-6" />
+                      </div>
+                      <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-serif bg-gradient-to-r from-primary via-primary-dark to-primary bg-clip-text text-transparent">
+                        What Our Customers Say
+                      </h2>
+                    </div>
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -3467,7 +3489,12 @@ export default function HomePage() {
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-white rounded-full blur-3xl"></div>
                     </div>
                   <div className="relative z-10">
-                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-serif mb-4">Ready to Ride?</h2>
+                    <div className="flex items-center justify-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg">
+                        <Car className="w-6 h-6 text-white" />
+                      </div>
+                      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-serif">Ready to Ride?</h2>
+                    </div>
                     <p className="text-lg sm:text-xl mb-8 text-white/90">Book your luxury ride in seconds</p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                       <Link href="/book">
@@ -3497,11 +3524,16 @@ export default function HomePage() {
                       {/* Decorative top accent */}
                       <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-primary to-transparent rounded-full"></div>
                       
-                      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-serif mb-3 bg-gradient-to-r from-primary via-primary-dark to-primary bg-clip-text text-transparent relative">
-                        See How It Works
-                        {/* Decorative underline */}
-                        <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent"></div>
-                      </h2>
+                      <div className="flex items-center justify-center gap-3 mb-3">
+                        <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary-dark rounded-xl flex items-center justify-center text-white shadow-lg">
+                          <Car className="w-6 h-6" />
+                    </div>
+                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-serif bg-gradient-to-r from-primary via-primary-dark to-primary bg-clip-text text-transparent relative">
+                          See How It Works
+                          {/* Decorative underline */}
+                          <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent"></div>
+                        </h2>
+                      </div>
                       <p className="text-gray-700 text-sm sm:text-base lg:text-lg max-w-xl mx-auto font-medium">
                         Watch our mobile app in action
                       </p>
@@ -3562,9 +3594,14 @@ export default function HomePage() {
               <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                   <div>
-                    <h2 className="text-3xl sm:text-4xl font-bold font-serif mb-4 bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent">
-                      Download Our Mobile App
-                    </h2>
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary-dark rounded-xl flex items-center justify-center text-white shadow-lg">
+                        <Car className="w-6 h-6" />
+                      </div>
+                      <h2 className="text-3xl sm:text-4xl font-bold font-serif bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent">
+                        Download Our Mobile App
+                      </h2>
+                    </div>
                     <p className="text-gray-600 mb-6 text-lg">
                       Get the full Luxride experience on your mobile device. Book rides, track drivers, and manage your trips on the go.
                     </p>
@@ -3670,6 +3707,11 @@ export default function HomePage() {
                       setTimeout(() => animateCounters(), 50)
                     }}
                   >
+                    <div className="absolute top-3 right-3 z-20">
+                      <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary-dark rounded-lg flex items-center justify-center text-white shadow-lg">
+                        <Car className="w-4 h-4" />
+                      </div>
+                    </div>
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div className="relative z-10 w-full">
                       <div className="w-full h-48 sm:h-56 md:h-48 mx-auto mb-3 sm:mb-4 rounded-2xl overflow-hidden border-2 border-primary/20 shadow-xl group-hover:border-primary transition-all duration-300 transform group-hover:scale-105">
@@ -3711,6 +3753,11 @@ export default function HomePage() {
                       setTimeout(() => setStatsVisible(true), 100)
                     }}
                   >
+                    <div className="absolute top-3 right-3 z-20">
+                      <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary-dark rounded-lg flex items-center justify-center text-white shadow-lg">
+                        <Car className="w-4 h-4" />
+                      </div>
+                    </div>
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div className="relative z-10 w-full">
                       <div className="w-full h-48 sm:h-56 md:h-48 mx-auto mb-3 sm:mb-4 rounded-3xl overflow-hidden border-2 border-primary/20 shadow-xl group-hover:border-primary transition-all duration-300 transform group-hover:scale-105">
@@ -3751,6 +3798,11 @@ export default function HomePage() {
                       setTimeout(() => setStatsVisible(true), 100)
                     }}
                   >
+                    <div className="absolute top-3 right-3 z-20">
+                      <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary-dark rounded-lg flex items-center justify-center text-white shadow-lg">
+                        <Car className="w-4 h-4" />
+                      </div>
+                    </div>
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div className="relative z-10 w-full">
                       <div className="w-full h-48 sm:h-56 md:h-48 mx-auto mb-3 sm:mb-4 rounded-xl overflow-hidden border-2 border-primary/20 shadow-xl group-hover:border-primary transition-all duration-300 transform group-hover:scale-105">
@@ -3791,6 +3843,11 @@ export default function HomePage() {
                       setTimeout(() => setStatsVisible(true), 100)
                     }}
                   >
+                    <div className="absolute top-3 right-3 z-20">
+                      <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary-dark rounded-lg flex items-center justify-center text-white shadow-lg">
+                        <Car className="w-4 h-4" />
+                      </div>
+                    </div>
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div className="relative z-10 w-full">
                       <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 rounded-full overflow-hidden border-4 border-primary/20 shadow-lg group-hover:border-primary transition-all duration-300 flex items-center justify-center bg-gradient-to-br from-primary/10 to-primary-dark/10">

@@ -42,12 +42,17 @@ export default function Navbar() {
     { href: '/trips', label: 'Trip History', icon: History },
     { href: '/inbox', label: 'Inbox', icon: Inbox },
     { href: '/profile', label: 'Profile', icon: User },
-    ...(userType === 'driver' ? [{ href: '/driver', label: 'Driver', icon: Car }] : []),
+    { href: '/driver', label: 'Driver', icon: Car },
     { href: '/login', label: 'Login', icon: LogIn },
     { href: '/signup', label: 'Sign Up', icon: UserPlus },
   ]
 
-  const isActive = (href: string) => pathname === href
+  const isActive = (href: string) => {
+    if (href === '/driver') {
+      return pathname === '/driver' || pathname.startsWith('/driver/')
+    }
+    return pathname === href
+  }
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-[100] bg-white shadow-lg border-b-2 border-primary">

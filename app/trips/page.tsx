@@ -56,8 +56,8 @@ export default function TripsPage() {
                     <Car className="w-6 h-6" />
                   </div>
                   <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-serif bg-gradient-to-r from-primary via-primary-dark to-primary bg-clip-text text-transparent">
-                    Trip History
-                  </h1>
+                  Trip History
+                </h1>
                 </div>
                 <p className="text-gray-600 text-sm md:text-base">View your past and upcoming rides</p>
               </div>
@@ -111,15 +111,15 @@ export default function TripsPage() {
                           {trip.status}
                         </span>
                       ) : (
-                        <span
+                      <span
                           className={`
                             px-5 py-2.5 rounded-xl text-sm font-semibold
                             shadow-sm border transition-all duration-200
                             ${getStatusColor(trip.status)}
                           `}
-                        >
-                          {trip.status}
-                        </span>
+                      >
+                        {trip.status}
+                      </span>
                       )}
                       <Link href={`/receipt?id=${trip.id}`}>
                         <Button variant="primary" size="sm">

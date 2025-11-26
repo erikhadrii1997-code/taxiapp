@@ -186,8 +186,8 @@ export default function BookPage() {
                   <Car className="w-6 h-6" />
                 </div>
                 <h1 className="text-4xl font-bold font-serif bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent">
-                  Book Your Ride
-                </h1>
+                Book Your Ride
+              </h1>
               </div>
               <p className="text-gray-600">Choose your perfect vehicle and get on the road</p>
             </div>

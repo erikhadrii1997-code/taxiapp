@@ -11,6 +11,7 @@ import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import Input from '@/components/ui/Input'
 import TaxiAnimation from '@/components/ui/TaxiAnimation'
+import SatisfactionMeter from '@/components/ui/SatisfactionMeter'
 import toast from 'react-hot-toast'
 import { VehicleType, Booking, Trip } from '@/types'
 import { formatCurrency, formatDate } from '@/lib/utils'
@@ -3527,6 +3528,13 @@ export default function HomePage() {
                   </div>
                 </div>
                     </div>
+
+                {/* Satisfaction Meter */}
+                <div className="mb-12 sm:mb-16">
+                  <SatisfactionMeter />
+                </div>
+
+                {/* Testimonials Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {[
                     { 

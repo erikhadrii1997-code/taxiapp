@@ -23,7 +23,7 @@ export default function SatisfactionMeter({ className = '' }: SatisfactionMeterP
     setIsComplete(false)
     setSatisfaction(0)
 
-    const duration = 3200 // 3.2 seconds for professional pacing
+    const duration = 3000 // 3 seconds for smooth gradual fill
     const targetValue = 99.9
     const startTime = Date.now()
 
@@ -31,10 +31,10 @@ export default function SatisfactionMeter({ className = '' }: SatisfactionMeterP
       const elapsed = Date.now() - startTime
       const progress = Math.min(elapsed / duration, 1)
       
-      // Subtle easing for professional feel - starts fast, slows at end
-      const easeOutCubic = 1 - Math.pow(1 - progress, 3)
-      const currentValue = easeOutCubic * targetValue
+      // Linear progression - fill gradually from 0.0% to 99.9%
+      const currentValue = progress * targetValue
       
+      // Update satisfaction value - this will make the circle fill gradually
       setSatisfaction(currentValue)
 
       if (progress < 1) {
@@ -100,7 +100,7 @@ export default function SatisfactionMeter({ className = '' }: SatisfactionMeterP
             opacity="0.25"
           />
 
-          {/* Main progress circle - fills gradually from the beginning */}
+          {/* Main progress circle - fills immediately from the beginning */}
           <circle
             cx="100"
             cy="100"
@@ -111,16 +111,12 @@ export default function SatisfactionMeter({ className = '' }: SatisfactionMeterP
             strokeLinecap="round"
             strokeDasharray={circumference}
             strokeDashoffset={offset}
-            style={{
-              transition: 'stroke-dashoffset 0.1s cubic-bezier(0.4, 0, 0.2, 1)',
-            }}
           />
 
           {/* Gradient definitions */}
           <defs>
             <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#4b5563" stopOpacity="1" />
-              <stop offset="50%" stopColor="#4b5563" stopOpacity="1" />
               <stop offset="100%" stopColor="#4b5563" stopOpacity="1" />
             </linearGradient>
           </defs>

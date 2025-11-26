@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { TrendingUp } from 'lucide-react'
+import { TrendingUp, CheckCircle2 } from 'lucide-react'
 
 interface SatisfactionMeterProps {
   className?: string
@@ -23,7 +23,7 @@ export default function SatisfactionMeter({ className = '' }: SatisfactionMeterP
     setIsComplete(false)
     setSatisfaction(0)
 
-    const duration = 3000 // 3 seconds to show all numbers
+    const duration = 3200 // 3.2 seconds for professional pacing
     const targetValue = 99.9
     const startTime = Date.now()
 
@@ -31,10 +31,10 @@ export default function SatisfactionMeter({ className = '' }: SatisfactionMeterP
       const elapsed = Date.now() - startTime
       const progress = Math.min(elapsed / duration, 1)
       
-      // Linear progression - use exact value for smooth fill from the beginning
-      const currentValue = progress * targetValue
+      // Subtle easing for professional feel - starts fast, slows at end
+      const easeOutCubic = 1 - Math.pow(1 - progress, 3)
+      const currentValue = easeOutCubic * targetValue
       
-      // Set the exact value so the circle fills smoothly from 0.0%
       setSatisfaction(currentValue)
 
       if (progress < 1) {
@@ -57,8 +57,8 @@ export default function SatisfactionMeter({ className = '' }: SatisfactionMeterP
     }
   }, [])
 
-  // Calculate circle dimensions
-  const radius = 90
+  // Calculate circle dimensions with precision
+  const radius = 92
   const circumference = 2 * Math.PI * radius
   const offset = circumference - (satisfaction / 100) * circumference
 
@@ -69,21 +69,35 @@ export default function SatisfactionMeter({ className = '' }: SatisfactionMeterP
       onClick={!isComplete ? startAnimation : undefined}
     >
       {/* Main Spinner Container */}
-      <div className="relative w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] cursor-pointer">
+      <div className="relative w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] cursor-pointer group">
         {/* SVG Circle Container */}
         <svg 
           className="transform -rotate-90 w-full h-full" 
           viewBox="0 0 200 200"
+          style={{ 
+            filter: 'drop-shadow(0 2px 8px rgba(0, 0, 0, 0.04))',
+          }}
         >
-          {/* Background track - subtle gray */}
+          {/* Outer subtle track */}
+          <circle
+            cx="100"
+            cy="100"
+            r={radius + 2}
+            fill="none"
+            stroke="#f3f4f6"
+            strokeWidth="2"
+            opacity="0.5"
+          />
+
+          {/* Background track - refined */}
           <circle
             cx="100"
             cy="100"
             r={radius}
             fill="none"
             stroke="#e5e7eb"
-            strokeWidth="8"
-            opacity="0.3"
+            strokeWidth="9"
+            opacity="0.25"
           />
 
           {/* Main progress circle - fills gradually from the beginning */}
@@ -93,70 +107,125 @@ export default function SatisfactionMeter({ className = '' }: SatisfactionMeterP
             r={radius}
             fill="none"
             stroke="url(#progressGradient)"
-            strokeWidth="10"
+            strokeWidth="9.5"
             strokeLinecap="round"
             strokeDasharray={circumference}
             strokeDashoffset={offset}
+            style={{
+              transition: 'stroke-dashoffset 0.1s cubic-bezier(0.4, 0, 0.2, 1)',
+            }}
           />
-
 
           {/* Gradient definitions */}
           <defs>
             <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#4b5563" stopOpacity="1" />
+              <stop offset="50%" stopColor="#4b5563" stopOpacity="1" />
               <stop offset="100%" stopColor="#4b5563" stopOpacity="1" />
             </linearGradient>
           </defs>
         </svg>
 
-        {/* Center Content */}
+        {/* Center Content - Enhanced Typography */}
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          {/* Main Percentage Display */}
-          <div className="text-center mb-2">
-            <div className="flex items-baseline justify-center gap-1">
+          {/* Main Percentage Display - Refined */}
+          <div className="text-center mb-3">
+            <div className="flex items-baseline justify-center gap-0.5">
               <span 
-                className="text-6xl sm:text-7xl font-light tracking-tight text-gray-900 tabular-nums"
+                className="text-6xl sm:text-7xl font-extralight tracking-tighter text-gray-900 tabular-nums"
                 style={{
                   fontVariantNumeric: 'tabular-nums',
-                  fontFamily: 'system-ui, -apple-system, sans-serif',
-                  fontWeight: 300,
-                  letterSpacing: '-0.02em',
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                  fontWeight: 200,
+                  letterSpacing: '-0.04em',
+                  lineHeight: '1',
                 }}
               >
                 {Math.min(satisfaction, 99.9).toFixed(1)}
               </span>
-              <span className="text-3xl sm:text-4xl font-light text-gray-600">%</span>
+              <span 
+                className="text-3xl sm:text-4xl font-extralight text-gray-500"
+                style={{
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                  fontWeight: 200,
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                %
+              </span>
             </div>
           </div>
 
-          {/* Label */}
-          <div className="flex items-center gap-1.5 text-gray-500 mb-1">
-            <TrendingUp className="w-3.5 h-3.5" strokeWidth={2.5} />
-            <span className="text-xs sm:text-sm font-medium tracking-wide uppercase" style={{ letterSpacing: '0.1em' }}>
-              Satisfaction
+          {/* Label - Professional */}
+          <div className="flex items-center gap-2 text-gray-500 mb-2">
+            {isComplete ? (
+              <CheckCircle2 className="w-4 h-4 text-gray-700" strokeWidth={2} />
+            ) : (
+              <TrendingUp className="w-4 h-4" strokeWidth={2.5} />
+            )}
+            <span 
+              className="text-xs sm:text-sm font-normal tracking-widest uppercase text-gray-600"
+              style={{ 
+                letterSpacing: '0.15em',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                fontWeight: 500,
+              }}
+            >
+              Satisfaction Rate
             </span>
           </div>
 
-          {/* Status Text */}
-          <div className="mt-2">
+          {/* Status Text - Refined */}
+          <div className="mt-1">
             {!hasStarted ? (
-              <span className="text-xs text-gray-400 font-medium">Click to measure</span>
+              <span 
+                className="text-xs font-normal text-gray-400"
+                style={{
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                  letterSpacing: '0.025em',
+                }}
+              >
+                Click to measure
+              </span>
             ) : isAnimating ? (
-              <span className="text-xs text-gray-700 font-medium animate-pulse">Measuring...</span>
+              <span 
+                className="text-xs font-normal text-gray-600"
+                style={{
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                  letterSpacing: '0.025em',
+                }}
+              >
+                Measuring...
+              </span>
             ) : (
-              <span className="text-xs text-green-600 font-medium">Complete</span>
+              <span 
+                className="text-xs font-normal text-gray-900"
+                style={{
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                  letterSpacing: '0.025em',
+                }}
+              >
+                Complete
+              </span>
             )}
           </div>
         </div>
 
-        {/* Click indicator - subtle pulse when not started */}
+        {/* Click indicator - refined pulse when not started */}
         {!hasStarted && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="w-3 h-3 rounded-full bg-gray-600/40 animate-ping"></div>
+            <div className="relative">
+              <div className="w-2.5 h-2.5 rounded-full bg-gray-400/50 animate-ping"></div>
+              <div className="absolute inset-0 w-2.5 h-2.5 rounded-full bg-gray-400/30"></div>
+            </div>
           </div>
         )}
-      </div>
 
+        {/* Subtle hover effect */}
+        {!hasStarted && (
+          <div className="absolute inset-0 rounded-full bg-gray-50/0 group-hover:bg-gray-50/30 transition-all duration-300 pointer-events-none"></div>
+        )}
+      </div>
     </div>
   )
 }
